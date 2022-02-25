@@ -1,0 +1,27 @@
+TYPE&NAME&ID&ORIENTATION&&&Status&ACTION&DESCRIPTION
+Switch&SWITCH&NULL&0&1&0&3&gaze + speech&Una manopola con cui impostare la pompa come man (manuale sempre accesa); 0 (sempre spenta); aut (controllata automaticamente). 
+Switch&Resistance Group A&NULL&0&1&0&2&gaze + speech&Selettore Resistenze 1 – acceso quando le resistenze 1 sono attive, almeno una delle resistenze deve essere accesa per generare vapore
+Switch&Resistance Group B&NULL&0&1&0&2&gaze + speech&Selettore Resistenze 2 – acceso quando le resistenze 2 sono attive, , almeno una delle resistenze deve essere accesa per generare vapore
+Switch&Resistance Group C&NULL&0&1&0&2&gaze + speech&Selettore Resistenze 3 – acceso quando le resistenze 3 sono attive, almeno una delle resistenze deve essere accesa per generare vapore
+Switch&Resistance Group D&NULL&0&1&0&2&gaze + speech&Selettore Resistenze 4 – acceso quando le resistenze 4 sono attive, almeno una delle resistenze deve essere accesa per generare vapore
+Switch&Pump Mode&NULL&0&1&0&2&gaze + speech&Selettore della modalità di funzionamento della pompa: 0 pompa spenta, MAN funzionamento manuale richiede che l’operatore controlli i parametri del generatore e attivi/disattivi le resistenze e la pompa e indichi i valori massimi di pressione e temperatura (SCONSIGLIATO), AUT il sistema gestisce in modo automatico i vari elementi e parametri del generatore (CONSIGLIATO)
+Valve&Valvole di esclusione del livello ottico 1&21.1&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio-  da aprirsi assieme alla valvola soprastante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio 
+Valve&Valvola intercettazione acqua&8&0&0&1&2&gaze + speech&Valvola di carico del serbatoio dell’acqua – deve essere aperta quando il generatore è in funzione
+Valve&Valvole di esclusione del livello ottico 2&21.2&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola sottostante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio 
+Valve&Valvola di intercettazione alimentazione acqua&12&1&0&0&2&gaze + speech&Valvola di intercettazione alimentazione acqua – permette il passaggio dell’acqua al generatore. Va tenuta aperta durante il funzionamento del generatore,  quando chiusa fa sì che la pompa mandi acqua in un tubo chiuso e non viene prodotto vapore.
+Valve&Valvola scarico acqua&13&0&0&1&2&gaze + speech&Valvola di svuotamento acqua caldaia – deve essere chiusa quando il generatore è in funzione
+Valve&Valvola intercettazione aspirazione pompa&17&0&1&0&2&gaze + speech&Valvola intercettazione aspirazione pompa – permette il passaggio dell’acqua al generatore. Quando il generatore è in funzione deve essere aperta, la sua chiusura può causare danni alla pompa.
+Valve&Valvola scarico vaschetta alimentazione acqua&19&0&1&0&2&gaze + speech&Valvola di scarico serbatoio acqua – deve essere chiusa quando il generatore è in funzione
+Valve&Valvola di scarico del livello ottico&22&1&0&0&2&gaze + speech&Valvola scarico livello ottico dell’acqua presente nel serbatoio-  scarica il livello ottico, va sempre chiusa quando il generatore è in funzione
+Valve&Presa vapore con valvola intercettazione&29&1&0&0&2&gaze + speech&Valvola scarico condensa surriscaldatore vapore – Permette al vapore di uscire dal generatore ed essere immesso nell’impianto. Quando il generatore è in funzione deve essere aperta, se chiuso il vapore non può uscire e la pressione rimane stabile all’interno dal generatore.
+Button&RESET&NULL&0&1&0&2&gaze + speech&Pulsante di reset – va premuto prima di attivare il generatore oppure.
+Button&EMERGENCY&NULL&0&1&0&2&gaze + speech&Pulsante di emergenza – deve essere premuto in caso di problemi per bloccare il sistema. Per sbloccarlo ruotare il pulsante prima di riattivare il generatore dopo un blocco anomalo.
+Switch&Red start handle&NULL&0&1&0&2&gaze + speech&Leva di attivazione – va posizionata su 1 per attivare il generatore e su 0 per spegnerlo
+LED&Electric Connection&NULL&0&1&0&2&gaze + speech&Spia Generatore in funzione – è accesa quando il generatore è in funzione
+LED&Emergency - Water Level&NULL&0&1&0&2&gaze + speech&Spia mancanza di acqua – si accende quando il contenuto dell’acqua nel serbatoio dell’acqua è poco oppure quando non arriva abbastanza acqua al generatore
+LED&Emergency - Temperature&NULL&0&1&0&2&gaze + speech&Spia allarme termico bloccato – 
+LED&Emergency - Pressure&NULL&0&1&0&2&gaze + speech&Spia allarme pressostato sicurezza – si accende quando la pressione è troppo elevata
+Instrument&Optical water gauge&20&NULL&NULL&NULL&&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel serbatoio, quando in funzione fare attenzione che non diminuisca solo, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
+Instrument&Steam pressure gauge&23&NULL&NULL&NULL&&gaze + speech&Manometro – indica il valore corrente della pressione
+Lid&Coperchio del serbatoio&15&NULL&NULL&NULL&&gaze + speech&Coperchio del serbatoio dell’acqua, permette di verificare il livello dell’acqua presente nel serbatoio. Deve essere chiuso quando il generatore è in funzione. 
+Instrument&Pressure Setpoint Display&NULL&NULL&NULL&NULL&&gaze + speech&Press the buttons to set the pressure
