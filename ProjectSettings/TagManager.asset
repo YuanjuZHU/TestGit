@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Part
+  - Objective toggle
+  - Button
+  - Switch
+  - LED
+  - Valve
+  - Instrument
+  - User profile toggle
+  - Mode toggle
+  - Lid
   layers:
   - Default
   - TransparentFX
