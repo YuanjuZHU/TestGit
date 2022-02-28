@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Leap.Unity.Interaction;
-using MGS.UCommon.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.Data;
