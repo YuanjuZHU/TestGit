@@ -58,3 +58,20 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Assets/Plugins/info.lundin.Math.dll
+Assets/Plugins/Interop.SpeechLib.dll
+Assets/Plugins/Newtonsoft.Json.dll
+Assets/Plugins/LeapMotion/Core/Models/StereoIR170-interaction-cone.obj
+Assets/Plugins/LeapMotion/Core/Plugins/x86/LeapC.dll
+Assets/Plugins/LeapMotion/Core/Plugins/x86_64/LeapC.dll
+Assets/Plugins/LeapMotion/Modules/InteractionEngine/Examples/Common Example Assets/Models/WireCube.obj
+Assets/Plugins/MGS/LitJson.dll
+Assets/Plugins/MGS/MGS.Common.dll
+Assets/Plugins/MGS/MGS.ElecEquipment.dll
+Assets/Plugins/MGS/MGS.Logger.dll
+Assets/Plugins/MGS/MGS.UCommon.dll
+Assets/Plugins/NPOI/ICSharpCode.SharpZipLib.dll
+Assets/Plugins/NPOI/NPOI.dll
+Assets/Plugins/NPOI/NPOI.OOXML.dll
+Assets/Plugins/NPOI/NPOI.OpenXml4Net.dll
+Assets/Plugins/NPOI/NPOI.OpenXmlFormats.dll
