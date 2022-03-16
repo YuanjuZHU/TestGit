@@ -1,0 +1,40 @@
+TYPE&NAME&ID&ORIENTATION x&ORIENTATION y&ORIENTATION z&Status&ACTION&DESCRIPTION
+LED&1A_LEFT PANEL_ LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Manopola con cui impostare la modalità di comando del generatore: locale  (per gestire il generatore azionando direttamenttamente sugli attuatori, consigliato); spenta (non si attiva); remoto (generatore controllato da computer remoto, non possibile). 
+Switch&1A_LEFT PANEL_LEVER&NULL&0&1&0&2&gaze + speech&Selettore Resistenze Gruppo 1 – acceso quando il gruppo di resistenze 1 è attivo. Almeno uno dei gruppi di resistenze deve essere acceso per generare vapore;;
+LED&1A_LEFT PANEL_MIDDLE LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Selettore Resistenze Gruppo 2 – acceso quando il gruppo di resistenze 2 è attivo. Almeno uno dei gruppi di resistenze deve essere acceso per generare vapore;;
+Switch&2A_LEFT PANEL_LEVER&NULL&0&1&0&2&gaze + speech&Selettore Resistenze Gruppo 3 – acceso quando il gruppo di resistenze 3 è attivo. Almeno uno dei gruppi di resistenze deve essere acceso per generare vapore;;
+Switch&3A_LEFT PANEL_LEVER&NULL&0&1&0&2&gaze + speech&Selettore Resistenze Gruppo 4 – acceso quando il gruppo di resistenze 4 è attivo. Almeno uno dei gruppi di resistenze deve essere acceso per generare vapore;;
+LED&1A_LEFT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Selettore della modalità di funzionamento della pompa: 0 pompa spenta, MAN funzionamento manuale richiede che l’operatore controlli i parametri del generatore e attivi/disattivi le resistenze e la pompa (SCONSIGLIATO), AUT il sistema gestisce in modo automatico il funzionamento del generatore (CONSIGLIATO);;
+Part&case&NULL&NULL&NULL&NULL&NULL&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio-  da aprirsi  assieme a quella posizionata sopra – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio ;;
+LED&1E_LEFT PANEL_ RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Valvola di carico del serbatoio dell’acqua – deve essere aperta quando il generatore è in funzione;;
+LED&1D_LEFT PANEL_ LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola sottostante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio ;;
+Switch&1D_LEFT PANEL_LEVER&NULL&1&0&0&2&gaze + speech&Valvola di intercettazione alimentazione acqua – permette il passaggio dell’acqua al generatore. Va tenuta aperta durante il funzionamento del generatore,  quando chiusa fa sì che la pompa mandi acqua in un tubo chiuso e non viene prodotto vapore.;;
+LED&1D_LEFT PANEL_ RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Valvola di svuotamento acqua caldaia – deve essere chiusa quando il generatore è in funzione;;
+LED&1E_LEFT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Valvola intercettazione aspirazione pompa – permette il passaggio dell’acqua al generatore. Quando il generatore è in funzione deve essere aperta, la sua chiusura può causare danni alla pompa.;;
+Switch&1E_LEFT PANEL_LEVER&NULL&0&1&0&2&gaze + speech&Valvola di scarico serbatoio acqua – deve essere chiusa quando il generatore è in funzione;;
+LED&1E_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Valvola scarico livello ottico dell’acqua presente nel serbatoio-  scarica il livello ottico, va sempre chiusa quando il generatore è in funzione;;
+Switch&1E_RIGHT PANEL_LEVER&NULL&1&0&0&2&gaze + speech&Valvola scarico condensa surriscaldatore vapore – Permette al vapore di uscire dal generatore ed essere immesso nell’impianto. Quando il generatore è in funzione deve essere aperta, se chiuso il vapore non può uscire e la pressione rimane stabile all’interno dal generatore.;;
+LED&1E_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Pulsante di reset – va premuto prima di attivare il generatore oppure quando si riattiva il generatore dopo che si sono incontrati dei problemi ;;
+LED&1F_LEFT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Pulsante di emergenza – deve essere premuto in caso di problemi per bloccare il sistema. Per sbloccarlo ruotare il pulsante prima di riattivare il generatore dopo un blocco anomalo.;;
+LED&1F_LEFT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Leva di attivazione dà corrente al generatore – va posizionata su 1 per attivare il generatore e su 0 per spegnerlo;;
+LED&1F_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Spia Generatore in funzione – è accesa quando il generatore è in funzione;;
+Switch&1F_RIGHT PANEL_LEVER&NULL&0&1&0&2&gaze + speech&Spia mancanza di acqua – si accende quando il contenuto dell’acqua nel serbatoio dell’acqua è poco oppure quando non arriva abbastanza acqua al generatore;;
+LED&1F_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Spia allarme termico bloccato – si accende quando il generatore va in blocco;;
+LED&1G_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Spia allarme pressostato sicurezza – si accende quando la pressione è troppo elevata;;
+Switch&1G_RIGHT PANEL_LEVER&NULL&NULL&NULL&NULL&2&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.;;
+LED&1G_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Manometro – indica il valore corrente della pressione;;
+LED&2C_RIGHT PANEL_BOTTOM LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Coperchio del serbatoio dell’acqua, permette di verificare il livello dell’acqua presente nel serbatoio. Deve essere chiuso quando il generatore è in funzione. ;;
+Switch&2C_RIGHT PANEL_LEVER&NULL&0&1&0&2&gaze + speech&Permette di scegliere il valore massimo della pressione da raggiungere. Valore troppo basso non attiva il generatore di vapore;;
+LED&2C_RIGHT PANEL_UP LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Valvola di sicurezza si attiva quando la pressione raggiunge il massimo ammissibile
+LED&2C_RIGHT PANEL_UP RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
+LED&2D_RIGHT PANEL_BOTTOM LIGHT&NULL&NULL&NULL&NULL&2&&
+Switch&2D_RIGHT PANEL_LEVER&NULL&0&1&0&2&&
+LED&2D_RIGHT PANEL_UP LEFT LIGHT&NULL&NULL&NULL&NULL&2&&
+LED&2D_RIGHT PANEL_UP RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
+LED&3C_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&&
+Switch&3C_RIGHT PANEL_LEVER&NULL&0&1&0&2&&
+LED&3C_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
+LED&3G_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&&
+Switch&3G_RIGHT PANEL_LEVER&NULL&0&1&0&2&&
+LED&3G_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
+BUTTON&3G_RIGHT PANEL_RIGHT BUTTON&NULL&NULL&NULL&NULL&2&&
