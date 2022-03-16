@@ -7,6 +7,7 @@ using Leap;
 using Leap.Unity;
 using Leap.Unity.Interaction;
 using MGS.UCommon.Generic;
+using NPOI.OpenXmlFormats.Dml.Diagram;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,24 +15,43 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(HingeJoint))]
 [RequireComponent(typeof(InteractionBehaviour))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(BlinkMaterial))]
 public class Switch :  MonoBehaviour, IRotatableComponent
 {
     #region properties
     //the switch component is able to turn on and turn off
     [SerializeField]
     protected bool isEnabled = true;
-    [SerializeField]
-    protected bool _rotateLimit=true;
-
-    [Tooltip("Range of rotate angle.")]
-    [SerializeField]
-    protected Range angleRange = new Range(-60, 60);
-
     public bool Enabled
     {
         set { isEnabled = value; }
         get { return isEnabled; }
     }
+
+    /// <summary>
+    /// Limit rotate angle?
+    /// </summary>
+    [SerializeField]
+    protected bool _rotateLimit=true;
+    public bool RotateLimit
+    {
+        set { _rotateLimit = value; }
+        get { return _rotateLimit; }
+    }
+
+    /// <summary>
+    /// Range of rotate angle.
+    /// </summary>
+    [Tooltip("Range of rotate angle.")]
+    [SerializeField]
+    public Range angleRange = new Range(-60, 60);
+    public Range AngleRange
+    {
+        set { angleRange = value; }
+        get { return angleRange; }
+    }
+
 
     //the switch is not adsorbent
     [SerializeField]
@@ -42,12 +62,13 @@ public class Switch :  MonoBehaviour, IRotatableComponent
         set { _isAdsorbent = value; }
     }
 
-    [Tooltip("Adsorbable angles.")]
-    [SerializeField]
-    protected float[] _adsorbableAngles;
+
     /// <summary>
     /// Adsorbable angles.
     /// </summary>
+    [Tooltip("Adsorbable angles.")]
+    [SerializeField]
+    public float[] _adsorbableAngles;
     public float[] AdsorbableAngles
     {
         set
@@ -61,19 +82,15 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     }
 
 
-    //the position of the switch handle
-    /// <summary>
-    /// switch current angle.
-    /// </summary>
-    public float Angle { set; get; }
+    public float Angle { set; get; } //the position of the switch handle
 
-    public float StartAngle { set; get; }
-    //the status of the switch(a percentage to describe the open degree of the switch)
-    private float _openPercentage;
+    public float StartAngle { set; get; } //the start position of switch handle
+
     /// <summary>
     /// switch current rotate percent base range.
     /// </summary>
-    private float OpenPercentage
+    private float _openPercentage; //the status of the switch(a percentage to describe the open degree of the switch)
+    public float OpenPercentage
     {
         get
         {
@@ -90,23 +107,8 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     }
 
 
-    /// <summary>
-    /// Limit rotate angle?
-    /// </summary>
-    public bool RotateLimit
-    {
-        set { _rotateLimit = value; }
-        get { return _rotateLimit; }
-    }
 
-    /// <summary>
-    /// Range of rotate angle.
-    /// </summary>
-    public Range AngleRange
-    {
-        set { angleRange = value; }
-        get { return angleRange; }
-    }
+
 
     /// <summary>
     /// Start angles.
@@ -127,11 +129,15 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     public Material DefaultCubeMaterialStatus2;
     public Material DefaultCylinderMaterialStatus2;
 
+    public AudioClip SwitchAudioClip;
+    //public List<Material> MaterialList=new List<Material>();
+    [SerializeField]
+    public SwitchStatusMaterialSets SwitchStatusMaterials = new SwitchStatusMaterialSets();
 
     private HingeJoint hingeJointSwitch;
 
 
-    public int _status;
+    private int _status;
     public int Status  
     {
         get => _status;
@@ -141,34 +147,25 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     public int previousStatus;
 
 
-    //[SerializeField]
-    //private string name;
-
-    //public string Name
-    //{
-    //    get { return name; }
-    //    set { name = value; }
-    //}
-
     //A dictionary for mapping the status with the adsorbable angles
     private Dictionary<float, int> SwitchAngleStatus = new Dictionary<float, int>();
     private Dictionary<int, float> SwitchStatusAngle = new Dictionary<int, float>();
-    //A variable to know if the actions of the statuses are executed
-    private bool actionsExecuted;
+    
+    //private bool actionsExecuted;
 
     [SerializeField]
-    public UnityEvent SwitchMethod;
-    public bool IsNeedCheck { get; set; }
+    public bool IsNeedCheck { get; set; }  //if the switch needs to be checked(for an action) 
     public bool IsPowerConnected { get; set; }
 
 #endregion properties
 
 
-#region methods
+    #region methods
     public void Awake()
     {
+        //var assemblyPath = this.GetType().Assembly;
+        //Debug.Log("the switch type of the types, can we get the classes?" + assemblyPath);
         Initialize();
-
     }
 
     public void Initialize()
@@ -176,11 +173,12 @@ public class Switch :  MonoBehaviour, IRotatableComponent
 
         StartAngularPosition = transform.localEulerAngles;
 
-        hingeJointSwitch = transform.GetComponent<HingeJoint>();
-        JointLimits limits = hingeJointSwitch.limits;
-        limits.min = angleRange.min;
-        limits.max = angleRange.max;
-        transform.GetComponent<HingeJoint>().limits = limits;
+        ////some settings(the limits) in hinge joint is controlled by the properties in this("Switch.cs") class
+        //hingeJointSwitch = transform.GetComponent<HingeJoint>();
+        //JointLimits limits = hingeJointSwitch.limits;
+        //limits.min = angleRange.min;
+        //limits.max = angleRange.max;
+        //transform.GetComponent<HingeJoint>().limits = limits;
 
         StartAngle = hingeJointSwitch.axis.x * StartAngularPosition.x + hingeJointSwitch.axis.y * StartAngularPosition.y + hingeJointSwitch.axis.z * StartAngularPosition.z;
         StartAngle = (StartAngle < 180) ? StartAngle : StartAngle - 360;
@@ -191,7 +189,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
         Angle = (StartAngle < 180) ? StartAngle : StartAngle - 360;
         Status = SwitchAngleStatus[GetAdsorbentAngle(Angle,AdsorbableAngles)];
         previousStatus = Status;
-        actionsExecuted = false;//the actions are not executed
+        //actionsExecuted = false;//the actions are not executed
         IsNeedCheck = false;
         IsPowerConnected = false;
     }
@@ -200,7 +198,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     void Update()
     {
         //if the status is modified in the inspector
-        if(previousStatus!= Status)
+        if (previousStatus!= Status)
         {
             //turn the component to the correct status
             Rotate(SwitchStatusAngle[Status] - StartAngle); //update the position
@@ -235,7 +233,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     /// </summary>
     public virtual void OnGraspMaintain()
     {
-        gameObject.GetComponent<BlinkMaterial>().IsBlink = false;
+        gameObject.GetComponent<BlinkMaterial>().IsBlink = false;  //stop blinking the actuator if it is grasped
         if (!isEnabled)
         {
             return;
@@ -305,15 +303,6 @@ public class Switch :  MonoBehaviour, IRotatableComponent
         //Rotate(Angle - StartAngularPosition.y);
         Status = SwitchAngleStatus[Angle];
         //Debug.Log("the status in Switch class: " + Status);
-        actionsExecuted = false;//grasp finish, needs to execute the status action 
-        if (!actionsExecuted)
-        {
-            SwitchMethod.Invoke();
-            //TODO excute the action
-            actionsExecuted = true;
-
-        }
-        //set the status of the switch
 
         UpdateMaterials();
         Evaluation.StudentOperations.ActingAction.StatusAfter = gameObject.GetComponentInChildren<IGeneratorComponent>().Status;
@@ -504,5 +493,38 @@ public class Switch :  MonoBehaviour, IRotatableComponent
         //actingModifyActuator.StatusBefore = Evaluation.StudentOperations.ActingAction.StatusBefore;
     }
     #endregion
+
+    void OnEnable()
+    {
+        Debug.Log("an on enabled test");
+    }
+
+}
+
+/// <summary>
+/// a switch have several status, for each status, there should be a set of materials 
+/// </summary>
+[System.Serializable]
+public class SwitchStatusMaterialSets
+{
+    //[SerializeField]
+    public List<SwitchPartsMaterialSets> MaterialSet; /*{ get; set; }*/
+
+}
+
+/// <summary>
+/// a switch may have several parts
+/// </summary>
+[System.Serializable]
+public class SwitchPartsMaterialSets
+{
+    //[SerializeField]
+    [HideInInspector]
+    public string FontName;
+    public List<Material> MaterialsOfDifferentParts; /*{ get; set; }*/
+    //public void Initialize()
+    //{
+    //    FontName = "Status in Initialize"/* + Switch.mySwitchMateri.MaterialSet.Count.ToString()*/;
+    //}
 }
 

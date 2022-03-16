@@ -9,7 +9,10 @@ using MGS.UCommon.Generic;
 using UnityEditor;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(HingeJoint))]
+[RequireComponent(typeof(InteractionBehaviour))]
+[RequireComponent(typeof(BlinkMaterial))]
 //[RequireComponent(typeof(InteractionBehaviour))]
 public class Valvola :  MonoBehaviour, IRotatableComponent
 {
