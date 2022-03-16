@@ -7,7 +7,7 @@ public class AnotherMonoClass : MonoBehaviour
 {
     void Update() {
         Debug.Log("Awaike");
-        var testEvaluation = gameObject.GetComponent<TestEvaluation>();
+        var testEvaluation = gameObject.GetComponent<ActuatorSettings>();
         //Debug.Log("testclass.level: " + testEvaluation.Level);
         Debug.Log("testclass.MyDatatable: " + testEvaluation.MyDatatable);
     }
