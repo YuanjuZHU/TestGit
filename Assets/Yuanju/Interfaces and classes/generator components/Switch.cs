@@ -133,6 +133,8 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     //public List<Material> MaterialList=new List<Material>();
     [SerializeField]
     public SwitchStatusMaterialSets SwitchStatusMaterials = new SwitchStatusMaterialSets();
+    [SerializeField]
+    public SwitchPartsMaterialSets SwitchGraspedMaterials = new SwitchPartsMaterialSets();
 
     private HingeJoint hingeJointSwitch;
 
@@ -313,50 +315,64 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     /// </summary>
     public void UpdateMaterials()
     {
-        if (IsPowerConnected)
+        //if (IsPowerConnected)
+        //{
+        //    for (int i = 0; i < transform.childCount; i++)
+        //    {
+        //        var child = transform.GetChild(i).gameObject;
+        //        if (child.name.Contains("cube"))
+        //        {
+        //            if (Status == 0)
+        //                child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus0;
+        //            if (Status == 1)
+        //                child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus1;
+        //            if (Status == 2)
+        //                child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus2;
+        //        }
+
+        //        if (child.name.Contains("cylinder") || child.name.Contains("integrated"))
+        //        {
+        //            if (Status == 0)
+        //                child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus0;
+        //            if (Status == 1)
+        //                child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus1;
+        //            if (Status == 2)
+        //                child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus2;
+        //        }
+
+        //    }
+        //}
+        //else
+        //{
+        //    for (int i = 0; i < transform.childCount; i++)
+        //    {
+        //        var child = transform.GetChild(i).gameObject;
+        //        if (child.name.Contains("cube"))
+        //        {
+        //            child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus0;
+        //        }
+
+        //        if (child.name.Contains("cylinder") || child.name.Contains("integrated"))
+        //        {
+        //            child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus0;
+        //        }
+
+        //    }
+        //}
+
+        for (int i = 0; i < transform.childCount; i++)
         {
-            for (int i = 0; i < transform.childCount; i++)
+            var child = transform.GetChild(i).gameObject;
+            if (IsPowerConnected)
             {
-                var child = transform.GetChild(i).gameObject;
-                if (child.name.Contains("cube"))
-                {
-                    if (Status == 0)
-                        child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus0;
-                    if (Status == 1)
-                        child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus1;
-                    if (Status == 2)
-                        child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus2;
-                }
-
-                if (child.name.Contains("cylinder") || child.name.Contains("integrated"))
-                {
-                    if (Status == 0)
-                        child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus0;
-                    if (Status == 1)
-                        child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus1;
-                    if (Status == 2)
-                        child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus2;
-                }
-
+                child.GetComponentInChildren<MeshRenderer>().material = SwitchStatusMaterials.MaterialSet[Status].MaterialsOfDifferentParts[i];
+            }
+            else
+            {
+                child.GetComponentInChildren<MeshRenderer>().material = SwitchStatusMaterials.MaterialSet[0].MaterialsOfDifferentParts[i];
             }
         }
-        else
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                var child = transform.GetChild(i).gameObject;
-                if (child.name.Contains("cube"))
-                {
-                    child.GetComponentInChildren<MeshRenderer>().material = DefaultCubeMaterialStatus0;
-                }
 
-                if (child.name.Contains("cylinder") || child.name.Contains("integrated"))
-                {
-                    child.GetComponentInChildren<MeshRenderer>().material = DefaultCylinderMaterialStatus0;
-                }
-
-            }
-        }
 
         //Debug.Log("Materials updated: " + gameObject);
     }
@@ -365,11 +381,12 @@ public class Switch :  MonoBehaviour, IRotatableComponent
 	{
 	    for(int i = 0; i < transform.childCount; i++) {
 	        var child = transform.GetChild(i).gameObject;
-	        if(child.name.Contains("cube"))
-	            child.GetComponentInChildren<MeshRenderer>().material = GraspedCubeMaterial;
-	        if(child.name.Contains("cylinder") || child.name.Contains("integrated"))
-	            child.GetComponentInChildren<MeshRenderer>().material = GraspedCylinderMaterial;
-	    }
+            //if(child.name.Contains("cube"))
+            //    child.GetComponentInChildren<MeshRenderer>().material = GraspedCubeMaterial;
+            //if(child.name.Contains("cylinder") || child.name.Contains("integrated"))
+            //    child.GetComponentInChildren<MeshRenderer>().material = GraspedCylinderMaterial;
+            child.GetComponentInChildren<MeshRenderer>().material = SwitchGraspedMaterials.MaterialsOfDifferentParts[i];
+        }
     }
 
 
@@ -521,7 +538,8 @@ public class SwitchPartsMaterialSets
     //[SerializeField]
     [HideInInspector]
     public string FontName;
-    public List<Material> MaterialsOfDifferentParts; /*{ get; set; }*/
+
+    public List<Material> MaterialsOfDifferentParts = new List<Material>(); /*{ get; set; }*/
     //public void Initialize()
     //{
     //    FontName = "Status in Initialize"/* + Switch.mySwitchMateri.MaterialSet.Count.ToString()*/;
