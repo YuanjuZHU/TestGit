@@ -508,7 +508,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
 public class SwitchStatusMaterialSets
 {
     //[SerializeField]
-    public List<SwitchPartsMaterialSets> MaterialSet; /*{ get; set; }*/
+    public List<SwitchPartsMaterialSets> MaterialSet=new List<SwitchPartsMaterialSets>(); /*{ get; set; }*/
 
 }
 
