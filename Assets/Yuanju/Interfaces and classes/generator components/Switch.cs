@@ -174,7 +174,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
         StartAngularPosition = transform.localEulerAngles;
 
         ////some settings(the limits) in hinge joint is controlled by the properties in this("Switch.cs") class
-        //hingeJointSwitch = transform.GetComponent<HingeJoint>();
+        hingeJointSwitch = transform.GetComponentInChildren<HingeJoint>();
         //JointLimits limits = hingeJointSwitch.limits;
         //limits.min = angleRange.min;
         //limits.max = angleRange.max;
@@ -259,8 +259,8 @@ public class Switch :  MonoBehaviour, IRotatableComponent
             else
             {
                 var audioSource = gameObject.AddComponent<AudioSource>();
-                AudioClip clip = (AudioClip)AssetDatabase.LoadAssetAtPath("Assets/Yuanju/Audio/Tik Tak (mp3cut.net).wav", typeof(AudioClip));
-                audioSource.clip = clip;
+                //AudioClip clip = (AudioClip)AssetDatabase.LoadAssetAtPath("Assets/Yuanju/Audio/Tik Tak (mp3cut.net).wav", typeof(AudioClip));
+                //audioSource.clip = clip;
                 gameObject.GetComponent<AudioSource>().Play();
             }
 
