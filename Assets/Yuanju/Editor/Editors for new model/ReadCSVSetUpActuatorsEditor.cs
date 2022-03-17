@@ -10,49 +10,47 @@ using System.Text;
 using System;
 using System.Reflection;
 
-[CustomEditor(typeof(ActuatorSettings))]
-public class ReadCSVSetUpActuatorsEditor : Editor
+//[CustomEditor(typeof(ActuatorSettings))]
+[System.Serializable]
+public class ReadCSVSetUpActuatorsEditor : EditorWindow
 {
     public static DataTable dt;
     public static List<string> ElementTypes=new List<string>();
-    public string TestEditorDisplay= "this is a string for editor display test";
+    public ActuatorSettings actuatorSettings;
+    private string path;
+    //private ActuatorSettings myTarget;
+
+    [MenuItem("Window/ReadCSVSetUpActuatorsEditor")]
+    static void Init()
+    {
+        // Get existing open window or if none, make a new one:
+        ReadCSVSetUpActuatorsEditor window = (ReadCSVSetUpActuatorsEditor)EditorWindow.GetWindow(typeof(ReadCSVSetUpActuatorsEditor));
+        window.Show();
+    }
 
     //get the info in Awake
     void Awake()
     {
-        Debug.Log("TestEditorDisplay 0: " + TestEditorDisplay);
         //todo expose the path in the inspector
-        dt = ReadDataFromCsv("Assets/Yuanju/elements of Tirreno Power models new.csv");  //read the CSV file and put the data into a data table
+        //dt = ReadDataFromCsv("Assets/Yuanju/elements of Tirreno Power models new.csv");  //read the CSV file and put the data into a data table
         //select the data rows who have the same name as the touched gameobject(eg. Select("name="+touched gameobject.parsedName) )
         //for (int i = 0; i < dt.Columns.Count; i++)
         //{
         //  Debug.Log("data columns[i] names: " + dt.Rows[dt.Rows.Count - 1][1]);
         //}
-        ActuatorSettings myTarget = (ActuatorSettings)target;
-        dt.TableName = "Generator elements pre-setup";
+
+        //myTarget = (ActuatorSettings)target;
+        ////dt.TableName = "Generator elements pre-setup";
         //myTarget.MyDatatable = dt;
 
-        ElementTypes = GetDataFromTable(dt, "TYPE", true);
-        foreach (var type in ElementTypes)
-        {
-            //Debug.Log("componentTags type: " + type);
-            CreateTag(type);
+        ////ElementTypes = GetDataFromTable(dt, "TYPE", true);
+        ////foreach (var type in ElementTypes)
+        ////{
+        ////    CreateTag(type);
+        ////}
 
-            //if (!ActuatorDataSos.Contains(newActuatorDataSO))
-            //{
-            //    AssetDatabase.CreateAsset(newActuatorDataSO, "Assets/Resources/SO/" + type + ".asset");
-            //    Debug.Log("I created assets. ");
-            //}
-        }
-
-        AttachAllTags();
-
-
-
-
-        TestEditorDisplay = "this is a string for editor display test, it has changed value";
-        Debug.Log("TestEditorDisplay 1: " + TestEditorDisplay);
-
+        ////AttachAllTags();
+        actuatorSettings = GameObject.Find("quadro electtrico manager").GetComponent<ActuatorSettings>();
     }
 
     #region Deal with data table
@@ -186,26 +184,40 @@ public class ReadCSVSetUpActuatorsEditor : Editor
     #endregion
 
 
-    public override void OnInspectorGUI()
+    public void OnGUI()
     {
         
-        base.OnInspectorGUI();
+        //base.OnInspectorGUI();
 
-        EditorGUILayout.TextField("Chuan shan jia", TestEditorDisplay);
-        //EditorGUILayout.EnumFlagsField("Chuang shang jia", ComponentsPickUpInstance);
-        //EditorGUILayout.EnumPopup("Chuang shang jia",);
-
-
-        
+        //dt = ReadDataFromCsv(myTarget.path);
 
         if (GUILayout.Button("choose csv file:", GUILayout.Width(100), GUILayout.Height(20)))
         {
-            //ElementTypes = GetDataFromTable(dt, "TYPE", true);
-            //AttachActuatorClass();
-            //Debug.Log("\"Set up the components\" has been clicked");
+            //var note1 = EditorGUI.TextArea(new Rect(lastRect.width + 50f, lastRect.height + 45, 400f, 20f), "there is no file yet");
+            path = EditorUtility.OpenFilePanel("Choose the configuration file", Application.dataPath, "csv");
+            if (path.Length != 0)
+            {
+                var fileContent = File.ReadAllBytes(path);
+                Debug.Log("the path of the file: "+ path);
+            }
+            dt = ReadDataFromCsv(path);
+
+            //myTarget = (ActuatorSettings)target;
+            dt.TableName = "Generator elements pre-setup";
+
+
+            ElementTypes = GetDataFromTable(dt, "TYPE", true);
+            foreach (var type in ElementTypes)
+            {
+                CreateTag(type);
+            }
+
+            AttachAllTags();
+
         }
-        Rect lastRect = GUILayoutUtility.GetLastRect();
-        var note = EditorGUI.TextArea(new Rect(lastRect.width, lastRect.height, lastRect.width, lastRect.height), "this is a text");
+        EditorGUILayout.TextField("file path:", path);
+        actuatorSettings.path = path;
+        //var note = EditorGUI.TextArea(new Rect(lastRect.width, lastRect.height, lastRect.width, lastRect.height), "this is a text");
 
 
 
