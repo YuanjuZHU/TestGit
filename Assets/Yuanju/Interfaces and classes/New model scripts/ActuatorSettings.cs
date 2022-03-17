@@ -7,12 +7,12 @@ using System.IO;
 using System.Text;
 
 //just a comment for test
+[System.Serializable]
 public class ActuatorSettings : MonoBehaviour {
     //public int experience;
     //public int Level {
     //    get { return experience / 750; }
     //}
-    public string TestSeriazlization = "This is a serialization test";
 
     [SerializeField]
     public DataTable myDatatable = new DataTable();
@@ -22,10 +22,15 @@ public class ActuatorSettings : MonoBehaviour {
         set { myDatatable = value; }
     }
 
+    [SerializeField]
+    public string path= "no file yet";
+
     void Awake()
     {
-        MyDatatable = ReadDataFromCsv("Assets/Yuanju/elements of Tirreno Power models.csv");
+        string realPath = path.Replace(Application.dataPath, "Assets"); //D:/files/GitTest/Assets/Yuanju/elements of Tirreno Power models new.csv-D:/files/GitTest/
+        MyDatatable = ReadDataFromCsv(realPath);
         MyDatatable.TableName = "Generator elements pre-setup";
+        Debug.Log("App path: "+ Application.dataPath);
     }
 
     void Update()
@@ -44,7 +49,7 @@ public class ActuatorSettings : MonoBehaviour {
         {
             Debug.Log("componentTags type 2: " + type);
         }
-        Debug.Log("componentTags type 3: " + TestSeriazlization);
+
     }
 
     private List<string> GetComponentInfo(DataTable dt, string ColumnTitle) {
