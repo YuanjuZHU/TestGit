@@ -240,25 +240,26 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
         }
 
 
-        GUILayout.Label("Set the rotating axis of the hinge joints:");
-        if (GUILayout.Button("Configure hinge joints", GUILayout.Width(400), GUILayout.Height(40)))
-        {
-            dt = ReadDataFromCsv(path);
-            dt.TableName = "Generator elements pre-setup";
-            //ElementTypes = GetDataFromTable(dt, "TYPE", true);
-            ConfigureHingeJoints();
-            Debug.Log("\"Configure hinge joints\" has been clicked");
-        }
-
-        GUILayout.Label("Fill in some properties of the actuator classes:");
+        GUILayout.Label("Set the rotating axis of the hinge joints and fill in some properties of the actuator classes: ");
         if (GUILayout.Button("Configure object(actuator) classes", GUILayout.Width(400), GUILayout.Height(40)))
         {
             dt = ReadDataFromCsv(path);
             dt.TableName = "Generator elements pre-setup";
             //ElementTypes = GetDataFromTable(dt, "TYPE", true);
+            ConfigureHingeJoints();
             ConfigureActuatorClass();
             Debug.Log("\"Configure object(actuator) classes\" has been clicked");
         }
+
+        //GUILayout.Label("Fill in some properties of the actuator classes:");
+        //if (GUILayout.Button("Configure object(actuator) classes", GUILayout.Width(400), GUILayout.Height(40)))
+        //{
+        //    dt = ReadDataFromCsv(path);
+        //    dt.TableName = "Generator elements pre-setup";
+        //    //ElementTypes = GetDataFromTable(dt, "TYPE", true);
+        //    ConfigureActuatorClass();
+        //    Debug.Log("\"Configure object(actuator) classes\" has been clicked");
+        //}
     }
 
     public void AttachActuatorClass()
@@ -283,22 +284,6 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                     go.AddComponent(mytype);
                     Debug.Log(string.Format("the components for {0} have been added! ", go));
                 }
-
-                //arrIndexObj = assembly.CreateInstance(elementType.FullName, true);
-                //object myTypeobject = assembly.CreateInstance("Switch", false);
-                //object myTypeOfobject = Activator.CreateInstance(typeOf,false);
-                //object mysWitch = Activator.CreateInstance(getType,false);
-
-                //var manager = GameObject.Find("quadro electtrico manager");
-                //manager.AddComponent(mytype);
-
-                //char[] chars = new char[26];
-                //for (int ctr = 0; ctr < 26; ctr++)
-                //    chars[ctr] = (char)(ctr + 0x0061);
-
-                //object obj = Activator.CreateInstance(typeof(Switch), false /*new object[] { chars, 13, 10 }*/);
-
-                //Debug.Log("MSDN test " + obj);
             }
         }
 
