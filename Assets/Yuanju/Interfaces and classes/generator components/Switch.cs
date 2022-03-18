@@ -129,7 +129,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     public Material DefaultCubeMaterialStatus2;
     public Material DefaultCylinderMaterialStatus2;
 
-    public AudioClip SwitchAudioClip;
+    public AudioSource SwitchAudioClip;
     //public List<Material> MaterialList=new List<Material>();
     [SerializeField]
     public SwitchStatusMaterialSets SwitchStatusMaterials = new SwitchStatusMaterialSets();
@@ -257,6 +257,8 @@ public class Switch :  MonoBehaviour, IRotatableComponent
             if (gameObject.GetComponent<AudioSource>() != null)
             {
                 gameObject.GetComponent<AudioSource>().Play();
+                //SwitchAudioClip.Play();
+                Debug.Log("I'm playing audio here!");
             }
             else
             {
@@ -307,7 +309,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
         //Debug.Log("the status in Switch class: " + Status);
 
         UpdateMaterials();
-        Evaluation.StudentOperations.ActingAction.StatusAfter = gameObject.GetComponentInChildren<IGeneratorComponent>().Status;
+        ////////////////////////////Evaluation.StudentOperations.ActingAction.StatusAfter = gameObject.GetComponentInChildren<IGeneratorComponent>().Status;
     }
 
     /// <summary>
