@@ -201,8 +201,6 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                 Debug.Log("the path of the file: "+ path);
             }
             dt = ReadDataFromCsv(path);
-
-            //myTarget = (ActuatorSettings)target;
             dt.TableName = "Generator elements pre-setup";
 
 
@@ -224,14 +222,29 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
         GUILayout.Label("Attach the actuator classes to gameobjects:");
         if (GUILayout.Button("Set up the components", GUILayout.Width(400), GUILayout.Height(40)))
         {
+            dt = ReadDataFromCsv(path);
+            dt.TableName = "Generator elements pre-setup";
             //ElementTypes = GetDataFromTable(dt, "TYPE", true);
             AttachActuatorClass();
             Debug.Log("\"Set up the components\" has been clicked");
         }
 
+        GUILayout.Label("Set up the mesh colliders for the actuators:");
+        if (GUILayout.Button("Set up colliders", GUILayout.Width(400), GUILayout.Height(40)))
+        {
+            dt = ReadDataFromCsv(path);
+            dt.TableName = "Generator elements pre-setup";
+            //ElementTypes = GetDataFromTable(dt, "TYPE", true);
+            SetUpColliders();
+            Debug.Log("\"Set up colliders\" has been clicked");
+        }
+
+
         GUILayout.Label("Set the rotating axis of the hinge joints:");
         if (GUILayout.Button("Configure hinge joints", GUILayout.Width(400), GUILayout.Height(40)))
         {
+            dt = ReadDataFromCsv(path);
+            dt.TableName = "Generator elements pre-setup";
             //ElementTypes = GetDataFromTable(dt, "TYPE", true);
             ConfigureHingeJoints();
             Debug.Log("\"Configure hinge joints\" has been clicked");
@@ -240,6 +253,8 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
         GUILayout.Label("Fill in some properties of the actuator classes:");
         if (GUILayout.Button("Configure object(actuator) classes", GUILayout.Width(400), GUILayout.Height(40)))
         {
+            dt = ReadDataFromCsv(path);
+            dt.TableName = "Generator elements pre-setup";
             //ElementTypes = GetDataFromTable(dt, "TYPE", true);
             ConfigureActuatorClass();
             Debug.Log("\"Configure object(actuator) classes\" has been clicked");
@@ -351,8 +366,12 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                                 generatorSwitch.IsAdsorbent = true;
 
                                 //initialize the size of adsorbent angles
-                                float[] angleSize = new float[a];
-                                generatorSwitch._adsorbableAngles = angleSize;
+                                if (generatorSwitch._adsorbableAngles.Length == 0) 
+                                {
+                                    float[] angleSize = new float[a];
+                                    generatorSwitch._adsorbableAngles = angleSize;
+                                }
+
 
                                 //the hinge joint's limits are set by using the switch.cs 
                                 var hingeJoint = generatorSwitch.gameObject.GetComponent<HingeJoint>();
@@ -362,7 +381,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                                 hingeLimits.max = generatorSwitch.angleRange.max;
                                 hingeJoint.limits = hingeLimits;
 
-                                //initialize the materials
+                                //initialize the number of materials
                                 if (generatorSwitch.SwitchStatusMaterials.MaterialSet.Count == 0) 
                                 {
                                     for (int j = 0; j < a; j++)
@@ -372,7 +391,16 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                                         generatorSwitch.SwitchStatusMaterials.MaterialSet.Add(material);
                                     }
                                 }
-                                //generatorSwitch.SwitchStatusMaterials.Initialize();
+
+                                //fill in the properties in rigidbody
+                                var rigidbody = generatorSwitch.gameObject.GetComponent<Rigidbody>();
+                                rigidbody.useGravity = false;
+                                rigidbody.isKinematic = true;
+
+                                //fill in the properties in interaction behaviour
+                                var interactionBehaviour = generatorSwitch.gameObject.GetComponent<InteractionBehaviour>();
+                                interactionBehaviour.graspedMovementType = InteractionBehaviour.GraspedMovementType.Nonkinematic;
+
                             }
                             break;
 
@@ -393,22 +421,35 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
         }
     }
 
-    //private static void PrintAssets()
-    //{
-    //    //Object[] data = AssetDatabase.LoadAllAssetsAtPath("Assets/ActuatorDataSO/.asset");
-    //    //ActuatorDataSO[] actuatorDataSO;
-    //    //actuatorDataSO = (ActuatorDataSO[])Resources.LoadAll("SO", typeof(ActuatorDataSO));
+    public void SetUpColliders()
+    {
+        var names = GetDataFromTable(dt,"NAME",false);
 
-    //    ActuatorDataSos = Resources.LoadAll("SO", typeof(ActuatorDataSO)).Cast<ActuatorDataSO>().ToList();
-    //    Debug.Log(ActuatorDataSos.Count + " Assets");
+        foreach (var name in names)
+        {
+            var go = GameObject.Find(name);
+            if (go.transform.childCount == 0 && go.GetComponent<MeshCollider>() == null) 
+            {
+                var col = go.AddComponent<MeshCollider>();
+                col.convex = true;
+                Debug.Log(string.Format("{0}'s collider has been added.",name) );
+            }
+            else
+            {
+                for (int i = 0; i < go.transform.childCount; i++)
+                {
+                    var child = go.transform.GetChild(i);
 
-    //    foreach (Object o in ActuatorDataSos)
-    //    {
-    //        Debug.Log(o);
-    //    }
-
-    //}
-
+                    if (child.gameObject.GetComponent<MeshCollider>() == null) 
+                    {
+                        var col = child.gameObject.AddComponent<MeshCollider>();
+                        col.convex = true;
+                        Debug.Log(string.Format("the part{0} of {1}'s collider has been added.", i + 1, name));
+                    }
+                }
+            }
+        }
+    }
 }
 
 
