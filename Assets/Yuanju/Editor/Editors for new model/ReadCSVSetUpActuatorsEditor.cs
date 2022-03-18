@@ -386,6 +386,10 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                                 var interactionBehaviour = generatorSwitch.gameObject.GetComponent<InteractionBehaviour>();
                                 interactionBehaviour.graspedMovementType = InteractionBehaviour.GraspedMovementType.Nonkinematic;
 
+                                //set up audio source to switches
+                                var audioSource = generatorSwitch.gameObject.GetComponent<AudioSource>();
+                                audioSource.playOnAwake = false;
+                                audioSource.clip = (AudioClip)AssetDatabase.LoadAssetAtPath("Assets/Yuanju/Audio/Tik Tak (mp3cut.net).wav", typeof(AudioClip));
                             }
                             break;
 

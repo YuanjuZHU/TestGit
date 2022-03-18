@@ -17,6 +17,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(InteractionBehaviour))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(BlinkMaterial))]
+[RequireComponent(typeof(AudioSource))]
 public class Switch :  MonoBehaviour, IRotatableComponent
 {
     #region properties
