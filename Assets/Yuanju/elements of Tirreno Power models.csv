@@ -26,14 +26,27 @@ LED&1G_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Manometro –
 LED&2C_RIGHT PANEL_BOTTOM LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Coperchio del serbatoio dell’acqua, permette di verificare il livello dell’acqua presente nel serbatoio. Deve essere chiuso quando il generatore è in funzione. ;;
 Switch&2C_RIGHT PANEL_LEVER&NULL&0&0&1&2&gaze + speech&Permette di scegliere il valore massimo della pressione da raggiungere. Valore troppo basso non attiva il generatore di vapore;;
 LED&2C_RIGHT PANEL_UP LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&Valvola di sicurezza si attiva quando la pressione raggiunge il massimo ammissibile
-LED&2C_RIGHT PANEL_UP RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
-LED&2D_RIGHT PANEL_BOTTOM LIGHT&NULL&NULL&NULL&NULL&2&&
-Switch&2D_RIGHT PANEL_LEVER&NULL&0&0&1&2&&
-LED&2D_RIGHT PANEL_UP LEFT LIGHT&NULL&NULL&NULL&NULL&2&&
-LED&2D_RIGHT PANEL_UP RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
-LED&3C_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&&
-Switch&3C_RIGHT PANEL_LEVER&NULL&0&0&1&2&&
-LED&3C_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
-LED&3G_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&&
-Switch&3G_RIGHT PANEL_LEVER&NULL&0&0&1&5&&
-LED&3G_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&&
+LED&2C_RIGHT PANEL_UP RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+LED&2D_RIGHT PANEL_BOTTOM LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+Switch&2D_RIGHT PANEL_LEVER&NULL&0&0&1&2&gaze + speech&
+LED&2D_RIGHT PANEL_UP LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+LED&2D_RIGHT PANEL_UP RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+LED&3C_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+Switch&3C_RIGHT PANEL_LEVER&NULL&0&0&1&2&gaze + speech&
+LED&3C_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+LED&3G_RIGHT PANEL_LEFT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+Switch&3G_RIGHT PANEL_LEVER&NULL&0&0&1&5&gaze + speech&
+LED&3G_RIGHT PANEL_RIGHT LIGHT&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&1d&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&1k&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&1f&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&1t&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&1s&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&2s&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&3s&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&2o&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&3o&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&1l&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&2l&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&3l&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola&4l&NULL&NULL&NULL&NULL&2&gaze + speech&
