@@ -13,6 +13,7 @@ using UnityEngine;
 [RequireComponent(typeof(HingeJoint))]
 [RequireComponent(typeof(InteractionBehaviour))]
 [RequireComponent(typeof(BlinkMaterial))]
+[RequireComponent(typeof(AudioSource))]
 //[RequireComponent(typeof(InteractionBehaviour))]
 public class Valvola :  MonoBehaviour, IRotatableComponent
 {
@@ -30,7 +31,14 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
 
     [Tooltip("Range of rotate angle.")]
     [SerializeField]
-    protected Range angleRange /*= new Range(-60, 60)*/;
+    public Range angleRange /*= new Range(-60, 60)*/;
+    public Range AngleRange
+    {
+        set { angleRange = value; }
+        get { return angleRange; }
+    }
+
+
     public bool Enabled
     {
         set { isEnabled = value; }
@@ -48,7 +56,7 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
 
     [Tooltip("Adsorbable angles.")]
     [SerializeField]
-    protected float[] _adsorbableAngles;
+    public float[] _adsorbableAngles;
     /// <summary>
     /// Adsorbable angles.
     /// </summary>
@@ -97,14 +105,6 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
     {
         set { _rotateLimit = value; }
         get { return _rotateLimit; }
-    }
-    /// <summary>
-    /// an angle range, will be used to implement the valves, do not mean the angle range go the valve.
-    /// </summary>
-    public Range AngleRange
-    {
-        set { angleRange = value; }
-        get { return angleRange; }
     }
 
     [SerializeField]
