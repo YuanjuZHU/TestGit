@@ -346,7 +346,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                             Debug.Log("this is a switch component: " + objectClass.GetType().ToString());
                             var generatorSwitch = objectClass as Switch; //the object class is a switch class
 
-                            if (generatorSwitch!=null)
+                            if (generatorSwitch != null)
                             {
                                 generatorSwitch.IsAdsorbent = true;
 
@@ -388,10 +388,68 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
 
                                 //set up audio source to switches
                                 var audioSource = generatorSwitch.gameObject.GetComponent<AudioSource>();
+                                generatorSwitch.SwitchAudioClip = audioSource;
                                 audioSource.playOnAwake = false;
                                 audioSource.clip = (AudioClip)AssetDatabase.LoadAssetAtPath("Assets/Yuanju/Audio/Tik Tak (mp3cut.net).wav", typeof(AudioClip));
                             }
                             break;
+
+                        case "Valvola":
+                            Debug.Log("this is a valve component: " + objectClass.GetType().ToString());
+                            var generatorValve = objectClass as Valvola; //the object class is a switch class
+
+                            if (generatorValve != null)
+                            {
+                                generatorValve.IsAdsorbent = true;
+
+                                //initialize the size of adsorbent angles
+                                Debug.Log("outer");
+                                if (generatorValve._adsorbableAngles.Length == 0)
+                                {
+                                    Debug.Log("inner");                            
+                                    float[] angleSize = new float[a];
+                                    generatorValve._adsorbableAngles = angleSize;
+                                }
+
+
+                                //the hinge joint's limits are set by using the switch.cs 
+                                var hingeJoint = generatorValve.gameObject.GetComponent<HingeJoint>();
+                                hingeJoint.useLimits = true;
+                                JointLimits hingeLimits = new JointLimits();
+                                hingeLimits.min = generatorValve.angleRange.min;
+                                hingeLimits.max = generatorValve.angleRange.max;
+                                hingeJoint.limits = hingeLimits;
+
+                                ////initialize the number of materials
+                                //if (generatorValve.SwitchStatusMaterials.MaterialSet.Count == 0)
+                                //{
+                                //    for (int j = 0; j < a; j++)
+                                //    {
+                                //        var material = new SwitchPartsMaterialSets();
+                                //        material.FontName = string.Format("Status {0} materials ", j);
+                                //        generatorValve.SwitchStatusMaterials.MaterialSet.Add(material);
+                                //    }
+                                //}
+
+                                //fill in the properties in rigidbody
+                                var rigidbody = generatorValve.gameObject.GetComponent<Rigidbody>();
+                                rigidbody.useGravity = false;
+                                rigidbody.isKinematic = true;
+
+                                //fill in the properties in interaction behaviour
+                                var interactionBehaviour = generatorValve.gameObject.GetComponent<InteractionBehaviour>();
+                                interactionBehaviour.graspedMovementType = InteractionBehaviour.GraspedMovementType.Nonkinematic;
+
+                                //set up audio source to switches
+                                var audioSource = generatorValve.gameObject.GetComponent<AudioSource>();
+                                generatorValve.audioSourceFluid = audioSource;
+                                audioSource.playOnAwake = false;
+                                audioSource.clip = (AudioClip)AssetDatabase.LoadAssetAtPath("Assets/Yuanju/Audio/waterpipe_15s.wav", typeof(AudioClip));
+                            }
+                            break;
+
+
+
 
                         default:
                             Debug.Log("this is an another component: "+ objectClass.GetType().ToString());
