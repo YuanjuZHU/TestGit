@@ -15,6 +15,7 @@ TagManager:
   - Mode toggle
   - Lid
   - Valvola
+  - Valvola wheel
   layers:
   - Default
   - TransparentFX
