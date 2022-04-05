@@ -44,8 +44,8 @@ Valvola&1t&NULL&NULL&NULL&NULL&2&gaze + speech&
 Valvola&1s&NULL&NULL&NULL&NULL&2&gaze + speech&
 Valvola&2s&NULL&NULL&NULL&NULL&2&gaze + speech&
 Valvola&3s&NULL&NULL&NULL&NULL&2&gaze + speech&
-Valvola&2o&NULL&NULL&NULL&NULL&2&gaze + speech&
-Valvola&3o&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola wheel&2o&NULL&NULL&NULL&NULL&2&gaze + speech&
+Valvola wheel&3o&NULL&NULL&NULL&NULL&2&gaze + speech&
 Valvola&1l&NULL&NULL&NULL&NULL&2&gaze + speech&
 Valvola&2l&NULL&NULL&NULL&NULL&2&gaze + speech&
 Valvola&3l&NULL&NULL&NULL&NULL&2&gaze + speech&
