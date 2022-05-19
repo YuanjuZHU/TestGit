@@ -16,6 +16,9 @@ TagManager:
   - Lid
   - Valvola
   - Valvola wheel
+  - Pivot test
+  - Translation
+  - Pivot
   layers:
   - Default
   - TransparentFX
