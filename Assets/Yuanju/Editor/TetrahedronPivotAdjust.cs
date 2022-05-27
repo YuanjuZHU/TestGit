@@ -29,6 +29,9 @@ public class TetrahedronPivotAdjust: EditorWindow
     {
         if (GUILayout.Button("Lauch correction!"))
         {
+            Offsets.Clear();
+            tetrahedronCenters.Clear();
+
             FindReferenceCenters();
             ComputeOffsets();
             MoveGeneratorParts();
