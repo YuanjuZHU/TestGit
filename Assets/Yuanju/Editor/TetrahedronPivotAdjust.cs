@@ -29,7 +29,7 @@ public class TetrahedronPivotAdjust: EditorWindow
 
     void OnGUI()
     {
-        if (GUILayout.Button("Lauch correction!"))
+        if (GUILayout.Button("Launch correction!"))
         {
             Offsets.Clear();
             tetrahedronCenters.Clear();
