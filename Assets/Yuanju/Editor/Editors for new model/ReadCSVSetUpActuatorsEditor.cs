@@ -11,6 +11,10 @@ using System;
 using System.Reflection;
 
 //[CustomEditor(typeof(ActuatorSettings))]
+
+/// <summary>
+/// this class is used to set the necessary components to different type of generator's elements, and fill in the properties of the elements with  proper value
+/// </summary>
 [System.Serializable]
 public class ReadCSVSetUpActuatorsEditor : EditorWindow
 {
@@ -184,6 +188,26 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
     #endregion
 
 
+    public void RenameObjects()
+    {
+        var ids = GetDataFromTable(dt, "ID", false);
+        var names = GetDataFromTable(dt, "NAME", false);
+
+        for (int i = 0; i < ids.Count; i++)
+        {
+            var go = GameObject.Find(ids[i]);
+            if (go != null)
+            {
+                go.name = names[i];
+            }
+            //GameObject.Find(names[i]).tag = tags[i];
+        }
+
+    }
+
+
+
+
     public void OnGUI()
     {
         
@@ -209,7 +233,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
             {
                 CreateTag(type);
             }
-
+            RenameObjects();
             AttachAllTags();
 
         }
