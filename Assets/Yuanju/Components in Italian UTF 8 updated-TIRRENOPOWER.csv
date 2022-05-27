@@ -5,7 +5,7 @@ Valvola&Valvola controllo manometro GAS2 a&20A&1&0&0&2&gaze + speech&valvola con
 Valvola&Valvola controllo manometro GAS2 b&20B&1&0&0&2&gaze + speech&valvola controllo manometro 
 Valvola&Valvola Aria primaria&17A&1&0&0&2&gaze + speech&valvola aria primaria
 Valvola&Valvola ingresso aria1&14A&1&0&0&2&gaze + speech&valvola aria ????
-Valvola&Valvola ingresso aria1&14B&1&0&0&2&gaze + speech&valvola aria ????
+Valvola&Valvola ingresso aria2&14B&1&0&0&2&gaze + speech&valvola aria ????
 Valvola&Valvola sfiato 1&12A&1&0&0&2&gaze + speech&valvola sfiato aria ????
 Valvola&Valvola sfiato 2&12B&1&0&0&2&gaze + speech&valvola sfiato aria ????
 Valvola&Valvola sfiato 3&12C&1&0&0&2&gaze + speech&valvola sfiato aria ????
