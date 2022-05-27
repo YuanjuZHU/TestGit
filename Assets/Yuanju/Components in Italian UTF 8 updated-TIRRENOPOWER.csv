@@ -1,6 +1,6 @@
 TYPE&NAME&ID&ROTATING AXIS x&ROTATING AXIS y&ROTATING AXIS z&TOTAL STATUS&ACTION&DESCRIPTION
-Instrument&Manometro GAS 1&23C&NULL&NULL&NULL&&gaze + speech&Manometro  indica il valore corrente della pressione del carburante
-Instrument&Manometro GAS2&20C&NULL&NULL&NULL&&gaze + speech&Manometro  indica il valore corrente della pressione del carburante
+Instrument&Manometro GAS 1&23C&NULL&NULL&NULL&NULL&gaze + speech&Manometro  indica il valore corrente della pressione del carburante
+Instrument&Manometro GAS2&20C&NULL&NULL&NULL&NULL&gaze + speech&Manometro  indica il valore corrente della pressione del carburante
 Valvola&Valvola controllo manometro GAS2 a&20A&1&0&0&2&gaze + speech&valvola controllo manometro 
 Valvola&Valvola controllo manometro GAS2 b&20B&1&0&0&2&gaze + speech&valvola controllo manometro 
 Valvola&Valvola Aria primaria&17A&1&0&0&2&gaze + speech&valvola aria primaria
@@ -18,25 +18,25 @@ Valvola&Valvola scarico pareti 2&10B&1&0&0&2&gaze + speech&valvola scarico acqua
 Valvola&Valvole di esclusione del livello ottico 1-1&26B&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola sottostante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
 Valvola&Valvole di esclusione del livello ottico 1-2&26D&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola soprastante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
 Valvola&Valvole scarico del livello ottico 1&26E&1&0&0&2&gaze + speech&Valvola scarico livello ottico dell’acqua presente nel serbatoio  
-Instrument&Misuratore ottico di livello&26C&NULL&NULL&NULL&&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
+Instrument&Misuratore ottico di livello&26C&NULL&NULL&NULL&NULL&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
 Valvola&Valvole di esclusione del livello ottico 2-1&33A&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola sottostante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
 Valvola&Valvole di esclusione del livello ottico 2-2&33B&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola sovrastante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
 Valvola&Valvole scarico del livello ottico 2&33C&1&0&0&2&gaze + speech&Valvola scarico livello ottico dell’acqua presente nel serbatoio  del serbatoio
-Instrument&Misuratore ottico di livello&31C&NULL&NULL&NULL&&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
-Instrument&Manometro generatore&28A&NULL&NULL&NULL&&gaze + speech&Manometro  indica il valore corrente della pressione del generatore????
+Instrument&Misuratore ottico di livello&31C&NULL&NULL&NULL&NULL&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
+Instrument&Manometro generatore&28A&NULL&NULL&NULL&NULL&gaze + speech&Manometro  indica il valore corrente della pressione del generatore????
 Valvola&Valvole di esclusione del livello ottico 3-1&29B&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola sottostante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
 Valvola&Valvole di esclusione del livello ottico 3-2&29C&1&0&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola soprastante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
-Instrument&Misuratore ottico di livello&29A&NULL&NULL&NULL&&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
-Instrument&Misuratore di temperatura&37A&NULL&NULL&NULL&&gaze + speech&visualizza la temperatura del vapore
-Valvola&Valvola bassissimo livello corpo cilindrico 1&35A&NULL&NULL&NULL&&gaze + speech&Valvola di scarico bassissimo livello corpo cilindrico
-Valvola&Valvola uscita vapore 1&8A&NULL&NULL&NULL&&gaze + speech&Valvola uscita vapore???
-Valvola&Valvola uscita vapore 2&8B&NULL&NULL&NULL&&gaze + speech&Valvola uscita vapore???
-Valvola&Valvola uscita vapore 3&8C&NULL&NULL&NULL&&gaze + speech&Valvola uscita vapore???
-Valvola&Valvola uscita vapore 4&8E&NULL&NULL&NULL&&gaze + speech&Valvola uscita vapore???
-Valvola&Valvola uscita vapore 5&8F&NULL&NULL&NULL&&gaze + speech&Valvola uscita vapore???
-Valvola&presa vapore &4A&NULL&NULL&NULL&&gaze + speech&Valvola presa vapore principale???
-Valvola&Scarico acqua pompa &2A&NULL&NULL&NULL&&gaze + speech&Valvola scarico acqua pompa???
-Valvola&Ingresso acqua pompa &1B&NULL&NULL&NULL&&gaze + speech&Valvola carico acqua pompa???
-Valvola&Uscita acqua pompa &1A&NULL&NULL&NULL&&gaze + speech&Valvola carico acqua generatore???
-Valvola&Valvola di sicurezza 1&36A&NULL&NULL&NULL&&gaze + speech&Valvola di sicurezza
-Valvola&Valvola di sicurezza 2&36B&NULL&NULL&NULL&&gaze + speech&Valvola di sicurezza
+Instrument&Misuratore ottico di livello&29A&NULL&NULL&NULL&NULL&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
+Instrument&Misuratore di temperatura&37A&NULL&NULL&NULL&NULL&gaze + speech&visualizza la temperatura del vapore
+Valvola&Valvola bassissimo livello corpo cilindrico 1&35A&NULL&NULL&NULL&NULL&gaze + speech&Valvola di scarico bassissimo livello corpo cilindrico
+Valvola&Valvola uscita vapore 1&8A&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
+Valvola&Valvola uscita vapore 2&8B&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
+Valvola&Valvola uscita vapore 3&8C&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
+Valvola&Valvola uscita vapore 4&8E&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
+Valvola&Valvola uscita vapore 5&8F&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
+Valvola&presa vapore &4A&NULL&NULL&NULL&NULL&gaze + speech&Valvola presa vapore principale???
+Valvola&Scarico acqua pompa &2A&NULL&NULL&NULL&NULL&gaze + speech&Valvola scarico acqua pompa???
+Valvola&Ingresso acqua pompa &1B&NULL&NULL&NULL&NULL&gaze + speech&Valvola carico acqua pompa???
+Valvola&Uscita acqua pompa &1A&NULL&NULL&NULL&NULL&gaze + speech&Valvola carico acqua generatore???
+Valvola&Valvola di sicurezza 1&36A&NULL&NULL&NULL&NULL&gaze + speech&Valvola di sicurezza
+Valvola&Valvola di sicurezza 2&36B&NULL&NULL&NULL&NULL&gaze + speech&Valvola di sicurezza
