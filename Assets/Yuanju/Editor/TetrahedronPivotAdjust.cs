@@ -4,7 +4,9 @@ using UnityEditor;
 using UnityEngine;
 
 
-
+/// <summary>
+/// this class is dedicated to the translation of the models that have pyramid referene, this class should be used once the models dragged to the scene
+/// </summary>
 public class TetrahedronPivotAdjust: EditorWindow
 {
     public GameObject ReferenceTetrahedron;
