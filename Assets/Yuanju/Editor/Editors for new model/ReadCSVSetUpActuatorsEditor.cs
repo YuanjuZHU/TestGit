@@ -428,6 +428,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
 
                                 //initialize the size of adsorbent angles
                                 Debug.Log("outer");
+                                Debug.Log("generatorValve._adsorbableAngles.Length: " + generatorValve._adsorbableAngles.Length);
                                 if (generatorValve._adsorbableAngles.Length == 0)
                                 {
                                     Debug.Log("inner");                            
