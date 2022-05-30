@@ -34,9 +34,9 @@ Valvola&Valvola uscita vapore 2&8B&NULL&NULL&NULL&NULL&gaze + speech&Valvola usc
 Valvola&Valvola uscita vapore 3&8C&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
 Valvola&Valvola uscita vapore 4&8E&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
 Valvola&Valvola uscita vapore 5&8F&NULL&NULL&NULL&NULL&gaze + speech&Valvola uscita vapore???
-Valvola&presa vapore &4A&NULL&NULL&NULL&NULL&gaze + speech&Valvola presa vapore principale???
-Valvola&Scarico acqua pompa &2A&NULL&NULL&NULL&NULL&gaze + speech&Valvola scarico acqua pompa???
-Valvola&Ingresso acqua pompa &1B&NULL&NULL&NULL&NULL&gaze + speech&Valvola carico acqua pompa???
-Valvola&Uscita acqua pompa &1A&NULL&NULL&NULL&NULL&gaze + speech&Valvola carico acqua generatore???
+Valvola&presa vapore&4A&NULL&NULL&NULL&NULL&gaze + speech&Valvola presa vapore principale???
+Valvola&Scarico acqua pompa&2A&NULL&NULL&NULL&NULL&gaze + speech&Valvola scarico acqua pompa???
+Valvola&Ingresso acqua pompa&1B&NULL&NULL&NULL&NULL&gaze + speech&Valvola carico acqua pompa???
+Valvola&Uscita acqua pompa&1A&NULL&NULL&NULL&NULL&gaze + speech&Valvola carico acqua generatore???
 Valvola&Valvola di sicurezza 1&36A&NULL&NULL&NULL&NULL&gaze + speech&Valvola di sicurezza
 Valvola&Valvola di sicurezza 2&36B&NULL&NULL&NULL&NULL&gaze + speech&Valvola di sicurezza
