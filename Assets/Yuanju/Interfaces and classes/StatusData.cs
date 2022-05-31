@@ -7,6 +7,8 @@ using UnityEngine;
 public class StatusData
 {
     //the first "digit" should be the group of the component belongs to  
+    public string Name;
+
     private char? group;
 
     public char? Group
@@ -36,7 +38,7 @@ public class StatusData
 
     public bool HasStatus
     {
-        get { return hasStatus = this.Status==null; }
+        get { return hasStatus = this.Status!=null; }
         set { hasStatus = value; }
     }
 

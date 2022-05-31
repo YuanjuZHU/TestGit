@@ -9,6 +9,7 @@ namespace Assets.Yuanju
 {
     public class Serializer
     {
+        [Serializable]
         public class list
         {
             [SerializeField]
@@ -31,12 +32,12 @@ namespace Assets.Yuanju
 
             [SerializeField] public int status;
 
-            [SerializeField] public bool powerBlock;
+            [SerializeField] public int powerBlock;
 
             public item() {
                
             }
-            public item(string name, int status, bool powerBlock)
+            public item(string name, int status, int powerBlock)
             {
                 this.name = name;
                 this.status = status;

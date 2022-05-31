@@ -13,7 +13,7 @@ public class ElectricConnectionLED : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ElectrcityConnectionHandle.GetComponent<Switch>().previousStatus != ElectrcityConnectionHandle.GetComponent<Switch>().Status)
+        if (ElectrcityConnectionHandle.GetComponent<Switch>().Status == 0) 
         {
             TurnOnOffLED();
         }
