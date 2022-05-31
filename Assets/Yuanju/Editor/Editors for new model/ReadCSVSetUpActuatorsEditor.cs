@@ -20,7 +20,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
 {
     public static DataTable dt;
     public static List<string> ElementTypes=new List<string>();
-    public ActuatorSettings actuatorSettings;
+    //public ActuatorSettings actuatorSettings;
     private string path;
     //private ActuatorSettings myTarget;
 
@@ -55,7 +55,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
 
         ////AttachAllTags();
         dt = null;
-        actuatorSettings = GameObject.Find("quadro electtrico manager").GetComponent<ActuatorSettings>();
+        //actuatorSettings = GameObject.Find("quadro electtrico manager").GetComponent<ActuatorSettings>();
     }
 
     #region Deal with data table
@@ -239,7 +239,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
 
         }
         EditorGUILayout.TextField("file path:", path);
-        actuatorSettings.path = path;
+        //actuatorSettings.path = path;
         //var note = EditorGUI.TextArea(new Rect(lastRect.width, lastRect.height, lastRect.width, lastRect.height), "this is a text");
 
 
