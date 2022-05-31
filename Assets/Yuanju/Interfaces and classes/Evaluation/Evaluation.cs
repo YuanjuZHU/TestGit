@@ -9,20 +9,21 @@ using Newtonsoft.Json;
 using info.lundin.Math;
 using Leap.Unity.Interaction;
 using UnityEngine.UI;
+using Assets.Yuanju.Interfaces_and_classes.generator_components;
 
 public class Evaluation : MonoBehaviour
 {
     private Dictionary<string, IGeneratorComponent> scriptComponents;
-    private List<string> componentNames;
     public static List<string> previousOperatedComponents=new List<string>(); //use a list of string to store the modified components
     public static GameObject LastOperatedComponent;
     public static GameObject CurrentOperatedComponent;
     public static bool isFinalSettingCorrect = false;
-    public static DataTable finalSettingdt = new DataTable();
+    //public static DataTable finalSettingdt = new DataTable();
+    private static ElementSettings settingToBeChecked;
     static List<char?> finalSettingGroupIndex = new List<char?>();
     static Dictionary<char, List<GameObject>> finalSettingComponentsGroup = new Dictionary<char, List<GameObject>>();  //eg. group a has resistance switch 1, 2, 3 and 4
     static Dictionary<char, List<GameObject>> sequenceComponentsGroup = new Dictionary<char, List<GameObject>>();
-    static List<char?> sequenceGroupIndex = new List<char?>();
+    static List<char?> sequenceGroupIndex = new List<char?>(); //a list to hold the group indentifier of the elements, one group has on identifier
     public static bool isSequenceCorrect = false;
     public static bool isSequenceForTestingCorrect = true;
     //[HideInInspector]public bool isConfirmClicked = false;
@@ -40,7 +41,7 @@ public class Evaluation : MonoBehaviour
     public static AnAction AnActionOnActuator;
     private static GameObject _sequenceContainer;
     private Dictionary<string, List<string>> ActuatorAndRelatedSequencetables;
-    private static Dictionary<string, int> actionSequenceActuator;
+    //private static Dictionary<string, int> actionSequenceActuator;
     public static GameObject feedbackPrompt;
     public GameObject FeedbackPrompt;
     public static Evaluation instance;
@@ -50,6 +51,11 @@ public class Evaluation : MonoBehaviour
     public static string encourageText;
     public string EncourageText;
     private static bool feedbackTextUpdated;
+
+    public float OffsetSequenceNumber;
+    private static bool isCheckCorrect = false;
+
+    List<Sequence> matricesToCheck = new List<Sequence>();
 
     //use the name of an actuator to find the data tables(those data tables' sequence is not null for this actuator,
     //and they are arranged in the sequence number).
@@ -86,10 +92,9 @@ public class Evaluation : MonoBehaviour
         LastOperatedComponent = null;
         CurrentOperatedComponent = null;
         scriptComponents = SetScenes.ScriptComponents;
-        componentNames = SetScenes.GeneratorElements;
         _sequenceContainer = new GameObject("Sequence Container");
-        CreateSequence();
-        actionSequenceActuator = new Dictionary<string, int>();
+        //CreateSequence();
+        //actionSequenceActuator = new Dictionary<string, int>();
         feedbackPrompt = FeedbackPrompt;
         encourageText = EncourageText;
         congratulationText = CongradulationText;
@@ -181,6 +186,9 @@ public class Evaluation : MonoBehaviour
 
     }
 
+    //private DataTable theCheckingTable;
+    //private int sequenceTableIndex;
+    //private bool IsActedTwice = false;
     /// <summary>
     /// preparations for sequence check: find the correct table 
     private void CheckSequence()
@@ -188,38 +196,81 @@ public class Evaluation : MonoBehaviour
         isSequenceCorrect = true;
         //isFinalSettingCorrect = false;
         //get column in the data table of the last modified component
-        Debug.Log("NPOIGetDatatable.SequenceDatatables.Count in evaluation: " + NPOIGetDatatable.SequenceDatatables.Count);
-        Debug.Log("acting actuator in check sequence: " + StudentOperations.ActingAction.Actuator);
-        Debug.Log("acting actuator in check sequence status before: " + StudentOperations.ActingAction.StatusBefore);
-        Debug.Log("acting actuator in check sequence status after: " + StudentOperations.ActingAction.StatusAfter);
         if (StudentOperations.ActingAction != null && StudentOperations.ActingAction.StatusBefore != StudentOperations.ActingAction.StatusAfter) //this condition can be removed since we put this condition in the object class
         {
             StudentOperations.AllActions.Add(StudentOperations.ActingAction); //add the acting actuator into the actions list
         }
 
-        DataTable theExacTableForSequence = new DataTable();
-        for (int i = 0; i < NPOIGetDatatable.SequenceDatatables.Count; i++)
+        //DataTable theExacTableForSequence = new DataTable();
+        ActuatorConditions theExactMatrixForSequence = new ActuatorConditions();
+
+        //for (int i = 0; i < SteamGenerator.SequenceMatrices.Count /*NPOIGetSequenceTable.SequenceDatatables.Count*/; i++) 
+        //{
+        //if(SteamGenerator.SequenceMatrices[i].SubTask/*NPOIGetSequenceTable.SequenceDatatables[i].TableName*/.Contains(PanelManager.listToggleText[2])) //find the corresponding data table by comparing the text of the selected task toggle with the task in the sequence data tables
+        //{
+        for (int i = 0; i < matricesToCheck.Count; i++)
         {
-            if (NPOIGetDatatable.SequenceDatatables[i].TableName.Contains(PanelManager.listToggleText[2])) //find the corresponding data table by comparing the text of the selected task toggle with the task in the sequence data tables
+            //var actuatorCondition = matricesToCheck[i];
+            //var drs = dt.Select();
+            //var cellValue = (StatusData)drs[0][StudentOperations.ActingAction.Actuator.name];
+            StatusData sd = new StatusData();
+            for (int j = 0; j < matricesToCheck[i].ActuatorToCheck.Count; j++)
             {
-                var dt = NPOIGetDatatable.SequenceDatatables[i];
-                var drs = dt.Select();
-                var cellValue = (StatusData) drs[0][StudentOperations.ActingAction.Actuator.name];
-                Debug.Log("status value group: "+cellValue.Group);
-                if (cellValue.Status != null && actionSequenceActuator.Keys.Contains(StudentOperations.ActingAction.Actuator.name))
+                if (matricesToCheck[i].ActuatorToCheck[j].Name == StudentOperations.ActingAction.Actuator.name)
                 {
-                    if(actionSequenceActuator[StudentOperations.ActingAction.Actuator.name] <= cellValue.Status) //actionSequenceActuator is a dictionary to know if the actuator is being operated for more rounds, '=' is for the case that the student to correct the error of a step
+                    int count = 0; //the time of the actuator appears discretely in the action list
+                    //check the action list
+                    int index = StudentOperations.AllActions.Count - 1;
+
+                    for (int k = StudentOperations.AllActions.Count - 1; k > 0; k--)
                     {
-                        theExacTableForSequence = dt;
-                        if(StudentOperations.ActingAction != null && StudentOperations.ActingAction.StatusBefore != StudentOperations.ActingAction.StatusAfter)
+                        if (StudentOperations.AllActions[k].Actuator.name == StudentOperations.AllActions[index].Actuator.name)
                         {
-                            GetComponentSequenceChecked(theExacTableForSequence, StudentOperations.ActingAction.Actuator.name);//check the sequence for the acting actuator
+                            if (index - k > 1)
+                            {
+                                count++;
+                            }
+                            index = k;
                         }
-                        if(isCheckCorrect) break;
+                    }
+                    Debug.Log("checking the current matrix: " + matricesToCheck[count].SubTask);
+                    Debug.Log("checking the count: " + count);
+                    GetComponentSequenceChecked(matricesToCheck[count], StudentOperations.ActingAction.Actuator.name);//check the sequence for the acting actuator
+                    if(!StudentOperations.ActingAction.IsModificationCorrect && matricesToCheck.Count - 1 > count ) 
+                    {
+                        Debug.Log("checking the next matrix: " + matricesToCheck[count + 1].SubTask);
+                        for (int l = 0; l < matricesToCheck[count + 1].ActuatorToCheck.Count; l++)
+                        {
+                            if (matricesToCheck[count + 1].ActuatorToCheck[l].Name == StudentOperations.ActingAction.Actuator.name)
+                            {
+                                if (matricesToCheck[count + 1].ActuatorToCheck[l].SequenceOrder != null) 
+                                {
+                                    GetComponentSequenceChecked(matricesToCheck[count + 1], StudentOperations.ActingAction.Actuator.name);
+                                }
+                            }
+                        }
+
+                    }
+                    if(!StudentOperations.ActingAction.IsModificationCorrect ) {
+                        Debug.Log("checking the previous matrix: " + matricesToCheck[count].SubTask);
+                        for (int l = 0; l < matricesToCheck[count ].ActuatorToCheck.Count; l++)
+                        {
+                            if (matricesToCheck[count].ActuatorToCheck[l].Name == StudentOperations.ActingAction.Actuator.name)
+                            {
+                                if (matricesToCheck[count].ActuatorToCheck[l].SequenceOrder != null)
+                                {
+                                    GetComponentSequenceChecked(matricesToCheck[count], StudentOperations.ActingAction.Actuator.name);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+
+                     
+            //}
+        //}
 
         isSequenceCorrect = StudentOperations.ActingAction.IsModificationCorrect;
     }
@@ -232,18 +283,19 @@ public class Evaluation : MonoBehaviour
         feedbackTextUpdated = false; //be ready to update the feedback text
         SpeechRecognizer.HasCommandFinish = true;
         isFinalSettingCorrect = true;
-        for (int i = 0; i < NPOIReadExcel.FinalSettings.Count; i++)
+        for (int i = 0; i < SteamGenerator.FinalSettings.Count; i++)
         {
-            if (NPOIReadExcel.FinalSettings[i].TableName.Contains(PanelManager.listToggleText[2]))
+            if (SteamGenerator.FinalSettings[i].SubTask.Contains(PanelManager.listToggleText[2]))
             {
-                finalSettingdt = NPOIReadExcel.FinalSettings[i].Copy();  //find the final setting data table that will be used for the checking. It is not necessary to use the copy of the data table
+                settingToBeChecked = SteamGenerator.FinalSettings[i];  //find the final setting data table that will be used for the checking. It is not necessary to use the copy of the data table
             }
         }
 
-        var names = NPOIReadExcel.ActuatorNames; //only the actuators will be checked, the control elements will be checked in other way later
+        var names = SteamGenerator.FinalSettingElements; //only the actuators will be checked, the control elements will be checked in other way later
         for (int i = 0; i < names.Count; i++)
         {
-            var sd = (StatusData) finalSettingdt.Rows[0][names[i]];
+            var sd = settingToBeChecked.ElementStatus[names[i]];
+
 
             if (sd.Group == null)//check if the excel cell has group value 
             {
@@ -271,33 +323,23 @@ public class Evaluation : MonoBehaviour
             }
 
         }
-        CheckGroupsStatusesFinalSetting(finalSettingdt); //check the final settings of the groups of actuators
+        CheckGroupsStatusesFinalSetting(); //check the final settings of the groups of actuators
 
 
         #region check final settings of the parameters
         Debug.Log("I start to check final parameters");
         int columnFlag = 0;
         bool isSubtaskFound = false;
-        for (int j = 0; j < NPOIGetParameters.parameterTable.Rows.Count; j++)
+        for (int j = 0; j < SteamGenerator.FinalParametersSetting.Count; j++)
         {
-            
-            for (int i = 0; i < NPOIGetParameters.parameterTable.Columns.Count; i++)
+            if (SteamGenerator.FinalParametersSetting[j].SubTask.Contains(PanelManager.listToggleText[2]))
             {
-                Debug.Log("PanelManager.listToggleText[2]:::::" + PanelManager.listToggleText[2]);
-                if (NPOIGetParameters.parameterTable.Rows[j][i].ToString().Contains(PanelManager.listToggleText[2]) )
-                {
-                    isSubtaskFound = true;
-                    columnFlag = i;
-                    Debug.Log("parameterTable sub task: " + NPOIGetParameters.parameterTable.Rows[j][i]);
-                    Debug.Log("NPOIGetParameters.parameterTable.Columns[i].ColumnName.ToString(): " + NPOIGetParameters.parameterTable.Columns[i+1].ColumnName.ToString());
-                    //the control elements columns must be after the sub task column in the excel
-                    //if (i > columnFlag)
-                    //{
-                        CheckFinalParameters(NPOIGetParameters.parameterTable.Columns[i+1].ColumnName.ToString());
-                        Debug.Log("I checked final parameters");
-                    //}
+                isSubtaskFound = true;
+                //foreach (var key in SteamGenerator.FinalParametersSetting[j].ParameterSetting.Keys)
+                //{
+                    CheckFinalParameters(SteamGenerator.FinalParametersSetting[j]/*SteamGenerator.FinalParametersSetting[j].ParameterSetting[key]*/);
+                //}
 
-                }
             }
 
             if (isSubtaskFound)
@@ -320,24 +362,23 @@ public class Evaluation : MonoBehaviour
     /// check final settings for the groups of actuators
     /// </summary>
     /// <param name="dt"></param>
-    private static void CheckGroupsStatusesFinalSetting(DataTable dt)
+    private static void CheckGroupsStatusesFinalSetting()
     {
         finalSettingComponentsGroup.Clear();
-        Debug.Log("final setting group count: " + finalSettingGroupIndex.Count);
         for (int j = 0; j < finalSettingGroupIndex.Count; j++)
         {
             char? constraintSymbole = new char();
             int? constraintStatus = 0;
             List<GameObject> myList = new List<GameObject>();
 
-            for (int i = 0; i < NPOIReadExcel.ActuatorNames.Count; i++)
+            for (int i = 0; i < SteamGenerator.FinalSettingElements.Count; i++)
             {
                 //Debug.Log("the elements of the Red start: " +  (StatusData)dr[columnTitle].Status);
-                StatusData sd = (StatusData)finalSettingdt.Rows[0][NPOIReadExcel.ActuatorNames[i]]; //get the elements of a column 
+                StatusData sd = (StatusData)settingToBeChecked.ElementStatus[SteamGenerator.FinalSettingElements[i]]; //get the elements of a column 
 
                 if (sd.Group == finalSettingGroupIndex[j])
                 {
-                    myList.Add(GameObject.Find(NPOIReadExcel.ActuatorNames[i]));
+                    myList.Add(GameObject.Find(SteamGenerator.FinalSettingElements[i]));
                     constraintSymbole = sd.Symbol;
                     constraintStatus = sd.Status;
                 }
@@ -349,15 +390,12 @@ public class Evaluation : MonoBehaviour
                 var componentStatus = finalSettingComponentsGroup[(char)finalSettingGroupIndex[j]][k].GetComponent<IGeneratorComponent>().Status;
                 groupSum += componentStatus; //compute the sum of the group of actuators.
             }
-            Debug.Log("groupSum: " + groupSum);
-            Debug.Log("constraintStatus: " + constraintStatus);
-
 
             #region Deal with  different symbols("+","-" and "=")
 
             if (constraintSymbole == '+' && groupSum < constraintStatus)
             {
-                Debug.Log(string.Format("the component of group: {0} should be at least: {1}", finalSettingGroupIndex[j], constraintStatus));
+                //Debug.Log(string.Format("the component of group: {0} should be at least: {1}", finalSettingGroupIndex[j], constraintStatus));
                 for(int i = 0; i < finalSettingComponentsGroup[(char)finalSettingGroupIndex[j]].Count; i++) {
                     WrongAction wrongAction = new WrongAction();
                     wrongAction.WrongActuator = finalSettingComponentsGroup[(char)finalSettingGroupIndex[j]][i];
@@ -373,7 +411,7 @@ public class Evaluation : MonoBehaviour
 
             if (constraintSymbole == '-' && groupSum > constraintStatus)
             {
-                Debug.Log(string.Format("the component of group: {0} should be at most: {1}", finalSettingGroupIndex[j], constraintStatus));
+                //Debug.Log(string.Format("the component of group: {0} should be at most: {1}", finalSettingGroupIndex[j], constraintStatus));
                 for(int i = 0; i < finalSettingComponentsGroup[(char)finalSettingGroupIndex[j]].Count; i++) {
                     WrongAction wrongAction = new WrongAction();
                     wrongAction.WrongActuator = finalSettingComponentsGroup[(char)finalSettingGroupIndex[j]][i];
@@ -404,39 +442,45 @@ public class Evaluation : MonoBehaviour
             }
 
             #endregion
-            Debug.Log("final setting group elements count: " + finalSettingComponentsGroup[(char)finalSettingGroupIndex[j]].Count);
-            Debug.Log("final setting group name: " + (char)finalSettingGroupIndex[j]);
+            //Debug.Log("final setting group elements count: " + finalSettingComponentsGroup[(char)finalSettingGroupIndex[j]].Count);
+            //Debug.Log("final setting group name: " + (char)finalSettingGroupIndex[j]);
 
         }
     }
 
+    //List<DataTable> sequenceTableToCheck = new List<DataTable>(); //the sequence tables that will be checked for a specific task
     /// <summary>
     /// reset the game
     /// </summary>
     public void ResetGame()
     {
+        if(PanelManager.listToggleText[2] == "") {
+            PanelManager.listToggleText[2] = "Activation";
+        }
+
         isFinalSettingCorrect = false;
         isSequenceCorrect = false;
         isSequenceForTestingCorrect = true;
         alarmAudio.Stop();
         alarm.GetComponentInChildren<MeshRenderer>().material = alarmGreen;
-        var names = NPOIGetDatatable.OperableComponentNames;
+        //var names = NPOIGetSequenceTable.OperableComponentNames;
+        var elementNames = SteamGenerator.SequenceElements;
 
-        actionSequenceActuator.Clear();
-        for(int i = 0; i < names.Count; i++)
+        //actionSequenceActuator.Clear();
+        for(int i = 0; i < elementNames.Count()/*names.Count*/; i++)
         {
             //reset actuators blinking 
-            var objectClass = GameObject.Find(NPOIGetDatatable.OperableComponentNames[i]).GetComponent<IGeneratorComponent>();
+            var objectClass = GameObject.Find(elementNames.ElementAt(i)/*NPOIGetSequenceTable.OperableComponentNames[i]*/).GetComponent<IGeneratorComponent>();
             objectClass.IsNeedCheck = false;
-            if (GameObject.Find(NPOIGetDatatable.OperableComponentNames[i]).GetComponent<BlinkMaterial>()!=null)
+            if (GameObject.Find(elementNames.ElementAt(i)/*NPOIGetSequenceTable.OperableComponentNames[i]*/).GetComponent<BlinkMaterial>()!=null)
             {
-                var blink = GameObject.Find(NPOIGetDatatable.OperableComponentNames[i]).GetComponent<BlinkMaterial>();
+                var blink = GameObject.Find(elementNames.ElementAt(i)/*NPOIGetSequenceTable.OperableComponentNames[i]*/).GetComponent<BlinkMaterial>();
                 blink.IsBlink = false;
             }
             //reset actuators material
-            SetScenes.ScriptComponents[names[i]].UpdateMaterials();
+            SetScenes.ScriptComponents[elementNames.ElementAt(i)/*names[i]*/].UpdateMaterials();
 
-            actionSequenceActuator.Add(names[i],0); //initialize the dictionary, every actuator is at sequence 0 at the beginning 
+            //actionSequenceActuator.Add(elementNames.ElementAt(i)/*names[i]*/, 0); //initialize the dictionary, every actuator is at sequence 0 at the beginning 
 
         }
 
@@ -450,129 +494,269 @@ public class Evaluation : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
         CreateSequence();//create the sequence in the scene
 
+        //sequenceTableToCheck.Clear();
+        //get the matrices of the task to be checked
+        for (int i = 0; i < SteamGenerator.SequenceMatrices.Count /*NPOIGetSequenceTable.SequenceDatatables.Count*/; i++)
+        {
+            if (SteamGenerator.SequenceMatrices[i].SubTask/*NPOIGetSequenceTable.SequenceDatatables[i].TableName*/.Contains(PanelManager.listToggleText[2])) //find the corresponding data table by comparing the text of the selected task toggle with the task in the sequence data tables
+            {
+                matricesToCheck.Add(SteamGenerator.SequenceMatrices[i]);
+            }
+        }
 
+        //theCheckingTable = null;
+        //sequenceTableIndex = 0;
+        //IsActedTwice = false;
     }
 
-    private static bool isCheckCorrect = false;
-    //todo implement 8+
     /// <summary>
     /// check sequence for the elements
     /// </summary>
     /// <param name="dt"></param>
     /// <param name="columnTitle"></param>
-    public static void GetComponentSequenceChecked(DataTable dt, string columnTitle)
+    public static void GetComponentSequenceChecked(Sequence sequence, string columnTitle)
     {
         StudentOperations.ActingAction.WrongSequenceActions.Clear();
-        DataRow[] drs = dt.Select(); //get all the rows of the data table
+        //DataRow[] drs = dt.Select(); //get all the rows of the data table
         StudentOperations.ActingAction.IsModificationCorrect = true; //the modification is correct by default, if there is anything wrong, it turns wrong
-        var sequenceInCell = (StatusData)drs[0][columnTitle];
-        for (int i = 0; i < NPOIGetDatatable.OperableComponentNames.Count; i++) //skip the "sequence" row, and the parameter rows
+        for (int i = 0; i < sequence.ActuatorToCheck.Count()/*NPOIGetSequenceTable.OperableComponentNames.Count*/; i++) //skip the "sequence" row, and the parameter rows
         {
-            StatusData sd = (StatusData)drs[i+1][columnTitle];//get the elements of a column 
+            StatusData sd;
+            //StatusData sd = (StatusData)drs[i+1][columnTitle];//get the elements of a column 
+            if (sequence.ActuatorToCheck[i].Name == columnTitle)
+            {
 
-            if(sd.Group == null) {
+                for (int j = 0; j < sequence.ActuatorToCheck[i].Prerequisites.Count; j++)
+                {
+                    sd = sequence.ActuatorToCheck[i].Prerequisites[j];
+                    Debug.Log("sequence.SubTask: " + sequence.SubTask);
 
-                if(sd.Status.HasValue) {
-
-                    if(drs[i+1].Table.Columns[columnTitle].Ordinal != i)  // for the non diagonal
+                    if(sd.Group == null)
                     {
-                        if(SetScenes.ScriptComponents[NPOIGetDatatable.OperableComponentNames[i]].Status != (int)sd.Status)  //if the status of an actuator is not correct according to the sequence
+                        if(sd.Status.HasValue)
                         {
-                            Debug.Log(string.Format("the component: {0} should be switched to: {1} before modifying {2}", NPOIGetDatatable.OperableComponentNames[i], sd.Status, columnTitle));
-                            Debug.Log(string.Format("the component: {0} has status: {1} ", NPOIGetDatatable.OperableComponentNames[i], SetScenes.ScriptComponents[NPOIGetDatatable.OperableComponentNames[i]].Status));
-                            isSequenceCorrect = false;
-                            isSequenceForTestingCorrect = false;
+                            if(sd.Symbol == null)
+                            {
+                                if(sequence.ActuatorToCheck[i].Prerequisites[j].Name != columnTitle/*drs[i + 1].Table.Columns[columnTitle].Ordinal != i*/)  // for the non diagonal
+                                {
+                                    if(SetScenes.ScriptComponents[sequence.ActuatorToCheck[i].Prerequisites[j].Name/*NPOIGetSequenceTable.OperableComponentNames[i]*/].Status != (int)sd.Status)  //if the status of an actuator is not correct according to the sequence
+                                    {
+                                        //Debug.Log(string.Format("the component: {0} should be switched to: {1} before modifying {2}", NPOIGetSequenceTable.OperableComponentNames[i], sd.Status, columnTitle));
+                                        //Debug.Log(string.Format("the component: {0} has status: {1} ", NPOIGetSequenceTable.OperableComponentNames[i], SetScenes.ScriptComponents[NPOIGetSequenceTable.OperableComponentNames[i]].Status));
+                                        isSequenceCorrect = false;
+                                        isSequenceForTestingCorrect = false;
 
-                            WrongAction wrongAction = new WrongAction();
-                            wrongAction.Initialize();
-                            wrongAction.WrongActuator = GameObject.Find(NPOIGetDatatable.OperableComponentNames[i]);
-                            wrongAction.ExpectedStatus = (int)sd.Status;
-                            wrongAction.Status = SetScenes.ScriptComponents[NPOIGetDatatable.OperableComponentNames[i]].Status;
-                            wrongAction.Group = null;
-                            wrongAction.Symbol = null;
-                            StudentOperations.ActingAction.WrongSequenceActions.Add(wrongAction);
-                            StudentOperations.ActingAction.IsModificationCorrect = false;
+                                        WrongAction wrongAction = new WrongAction();
+                                        wrongAction.Initialize();
+                                        wrongAction.WrongActuator = GameObject.Find(sequence.ActuatorToCheck[i].Prerequisites[j].Name)/*GameObject.Find(NPOIGetSequenceTable.OperableComponentNames[i])*/;
+                                        wrongAction.ExpectedStatus = (int)sd.Status;
+                                        wrongAction.Status = SetScenes.ScriptComponents[sequence.ActuatorToCheck[i].Prerequisites[j].Name].Status;/*SetScenes.ScriptComponents[NPOIGetSequenceTable.OperableComponentNames[i]].Status;*/
+                                        wrongAction.Group = null;
+                                        wrongAction.Symbol = null;
+                                        StudentOperations.ActingAction.WrongSequenceActions.Add(wrongAction);
+                                        StudentOperations.ActingAction.IsModificationCorrect = false;
+
+                                    }
+                                    else //everything is correct for non-diagonal elements
+                                    {
+                                        //Debug.Log(string.Format("the component: {0} has the correct status: {1} before modifying {2}", NPOIGetSequenceTable.OperableComponentNames[i], sd.Status, columnTitle));
+                                    }
+
+                                }
+
+                                else //check for the diagonal
+                                {
+                                    StudentOperations.ActingAction.ExpectedStatus = sd.Status;
+                                    if(SetScenes.ScriptComponents[columnTitle/*SteamGenerator.SequenceElements.ElementAt(j)*//*NPOIGetSequenceTable.OperableComponentNames[i]*/].Status != (int)sd.Status)
+                                    {
+                                        StudentOperations.ActingAction.IsModificationCorrect = false;
+                                        StudentOperations.ActingAction.Group = null;
+                                        StudentOperations.ActingAction.Symbol = null;
+                                        //Debug.Log("I find a wrong action: " + sequence.ActuatorToCheck[i].Prerequisites[j].Name);
+
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                if (sequence.ActuatorToCheck[i].Prerequisites[j].Name != columnTitle/*drs[i + 1].Table.Columns[columnTitle].Ordinal != i*/)  // for the non diagonal
+                                {
+
+                                    WrongAction wrongAction = new WrongAction();
+                                    wrongAction.Initialize();
+                                    wrongAction.WrongActuator = GameObject.Find(sequence.ActuatorToCheck[i].Prerequisites[j].Name/*NPOIGetSequenceTable.OperableComponentNames[i]*/);
+                                    wrongAction.ExpectedStatus = (int)sd.Status;
+                                    wrongAction.Status = SetScenes.ScriptComponents[sequence.ActuatorToCheck[i].Prerequisites[j].Name/*NPOIGetSequenceTable.OperableComponentNames[i]*/].Status;
+                                    wrongAction.Group = null;
+                                    if (sd.Symbol == '+') //case "+"
+                                    {
+                                        if (SetScenes.ScriptComponents[sequence.ActuatorToCheck[i].Prerequisites[j].Name/*NPOIGetSequenceTable.OperableComponentNames[i]*/].Status <= (int)sd.Status)   //if the status of an actuator is not correct according to the sequence
+                                        {
+                                            //Debug.Log(string.Format("the component: {0} should be switched to: {1} before modifying {2}", NPOIGetSequenceTable.OperableComponentNames[i], sd.Status, columnTitle));
+                                            //Debug.Log(string.Format("the component: {0} has status: {1} ", NPOIGetSequenceTable.OperableComponentNames[i], SetScenes.ScriptComponents[NPOIGetSequenceTable.OperableComponentNames[i]].Status));
+                                            isSequenceCorrect = false;
+                                            isSequenceForTestingCorrect = false;
+                                            wrongAction.Symbol = '+';
+                                            StudentOperations.ActingAction.WrongSequenceActions.Add(wrongAction);
+                                            StudentOperations.ActingAction.IsModificationCorrect = false;
+                                        }
+                                    }
+                                    if (sd.Symbol == '-') //case "-"
+                                    {
+                                        if (SetScenes.ScriptComponents[sequence.ActuatorToCheck[i].Prerequisites[j].Name/*NPOIGetSequenceTable.OperableComponentNames[i]*/].Status >= (int)sd.Status)  //if the status of an actuator is not correct according to the sequence
+                                        {
+                                            isSequenceCorrect = false;
+                                            isSequenceForTestingCorrect = false;
+                                            wrongAction.Symbol = '-';
+                                            wrongAction.ExpectedStatus = (int)sd.Status;
+                                            StudentOperations.ActingAction.WrongSequenceActions.Add(wrongAction);
+                                            StudentOperations.ActingAction.IsModificationCorrect = false;
+                                        }
+                                    }
+
+                                    else //everything is correct for non-diagonal elements
+                                    {
+                                        //Debug.Log(string.Format("the component: {0} has the correct status: {1} before modifying {2}", NPOIGetSequenceTable.OperableComponentNames[i], sd.Status, columnTitle));
+                                    }
+
+                                }
+
+                                else //check for the diagonal
+                                {
+                                    StudentOperations.ActingAction.ExpectedStatus = sd.Status;
+                                    StudentOperations.ActingAction.Group = null;
+
+                                    //if (sd.Symbol == null)
+                                    //{
+                                    //    if (SetScenes.ScriptComponents[NPOIGetSequenceTable.OperableComponentNames[i]].Status != (int)sd.Status)
+                                    //    {
+                                    //        StudentOperations.ActingAction.IsModificationCorrect = false;
+                                    //        StudentOperations.ActingAction.Symbol = null;
+                                    //    }
+                                    //}
+
+
+                                    if (sd.Symbol == '+') //case "+"
+                                    {
+                                        if (SetScenes.ScriptComponents[sequence.ActuatorToCheck[i].Prerequisites[j].Name/*NPOIGetSequenceTable.OperableComponentNames[i]*/].Status <= (int)sd.Status)   //if the status of an actuator is not correct according to the sequence
+                                        {
+                                            //Debug.Log(string.Format("the component: {0} should be switched to: {1} before modifying {2}", NPOIGetSequenceTable.OperableComponentNames[i], sd.Status, columnTitle));
+                                            //Debug.Log(string.Format("the component: {0} has status: {1} ", NPOIGetSequenceTable.OperableComponentNames[i], SetScenes.ScriptComponents[NPOIGetSequenceTable.OperableComponentNames[i]].Status));
+                                            isSequenceCorrect = false;
+                                            isSequenceForTestingCorrect = false;
+                                            StudentOperations.ActingAction.Symbol = '+';
+                                            StudentOperations.ActingAction.IsModificationCorrect = false;
+                                        }
+                                    }
+                                    if (sd.Symbol == '-') //case "-"
+                                    {
+                                        if (SetScenes.ScriptComponents[sequence.ActuatorToCheck[i].Prerequisites[j].Name/*NPOIGetSequenceTable.OperableComponentNames[i]*/].Status >= (int)sd.Status)  //if the status of an actuator is not correct according to the sequence
+                                        {
+                                            isSequenceCorrect = false;
+                                            isSequenceForTestingCorrect = false;
+                                            StudentOperations.ActingAction.Symbol = '-';
+                                            StudentOperations.ActingAction.IsModificationCorrect = false;
+                                        }
+                                    }
+
+
+                                }
+
+
+
+                            }
+
 
                         }
-                        else //everything is correct for non-diagonal elements
+                        //Debug.Log("group is null: " + sd.Group);
+                        //Debug.Log("group is null, name: " + sd.Name);
+                    }
+
+                    else //add all the different groups to a list 
+                    {
+                        //Debug.Log("group is not null: " +sd.Group);
+                        //for the actuators belong to a group, they should also have their expected status
+                        if (sequence.ActuatorToCheck[i].Prerequisites[j].Name == columnTitle/*drs[i + 1].Table.Columns[columnTitle].Ordinal == i*/)
                         {
-                            Debug.Log(string.Format("the component: {0} has the correct status: {1} before modifying {2}", NPOIGetDatatable.OperableComponentNames[i], sd.Status, columnTitle));
+                            StudentOperations.ActingAction.ExpectedStatus = sd.Status;
                         }
 
-                    } 
-
-                    else //check for the diagonal
-                    {
-                        StudentOperations.ActingAction.ExpectedStatus = sd.Status;
-                        if(SetScenes.ScriptComponents[NPOIGetDatatable.OperableComponentNames[i]].Status != (int)sd.Status)
+                        if (!sequenceGroupIndex.Contains(sd.Group))
                         {
-                            StudentOperations.ActingAction.IsModificationCorrect = false;
-                            StudentOperations.ActingAction.Group = null;
-                            StudentOperations.ActingAction.Symbol = null;
+                            sequenceGroupIndex.Add(sd.Group);
+                            //Debug.Log("Adding group: " + sequenceGroupIndex[0]);
                         }
                     }
 
                 }
-
             }
-
-            else //add all the different groups to a list 
-            {
-                //for the actuators belong to a group, they should also have their expected status
-                if (drs[i + 1].Table.Columns[columnTitle].Ordinal == i)
-                {
-                    StudentOperations.ActingAction.ExpectedStatus = sd.Status;  
-                }
-
-                if (!sequenceGroupIndex.Contains(sd.Group))
-                {
-                    sequenceGroupIndex.Add(sd.Group);
-                }
-            }
-
+            //StatusData sd = (StatusData)sequence[columnTitle];//get the elements of a column 
         }
 
 
         sequenceComponentsGroup.Clear();
-        CheckGroupsStatusesSequence(dt, columnTitle);
+        CheckGroupsStatusesSequence(sequence, columnTitle);
+
+
 
         isCheckCorrect = StudentOperations.ActingAction.IsModificationCorrect;
-        if(sequenceInCell.Status != null && isCheckCorrect) //change the value for the actuator
-        {
-            actionSequenceActuator.Remove(StudentOperations.ActingAction.Actuator.name);
-            actionSequenceActuator.Add(StudentOperations.ActingAction.Actuator.name, (int)sequenceInCell.Status);
-        }
+
+
+        //for (int i = 0; i < sequence.ActuatorToCheck.Count()/*NPOIGetSequenceTable.OperableComponentNames.Count*/; i++) //skip the "sequence" row, and the parameter rows
+        //{
+        //    if (sequence.ActuatorToCheck[i].Name == columnTitle)
+        //    {
+        //        if (isCheckCorrect)
+        //        {
+        //            actionSequenceActuator.Remove(StudentOperations.ActingAction.Actuator.name);
+        //            actionSequenceActuator.Add(StudentOperations.ActingAction.Actuator.name, sequence.ActuatorToCheck[i].SequenceOrder);
+        //        }
+        //    }
+        //}
     }
     /// <summary>
     /// check sequence of the elements that belong to a group 
     /// </summary>
     /// <param name="dt"></param>
     /// <param name="columnTitle"></param>
-    private static void CheckGroupsStatusesSequence(DataTable dt, string columnTitle)
+    private static void CheckGroupsStatusesSequence(Sequence sequenceMatrix/*DataTable dt*/, string columnTitle)
     {
-        DataRow[] drs = dt.Select(); //get all the rows of the data table
+        //DataRow[] drs = dt.Select(); //get all the rows of the data table
         for (int j = 0; j < sequenceGroupIndex.Count; j++)
         {
             char? constraintSymbole = new char();
             int? constraintStatus = 0;
             List<GameObject> myList = new List<GameObject>();
 
-            for (int i = 0; i < NPOIGetDatatable.OperableComponentNames.Count; i++)
+            for (int i = 0; i < sequenceMatrix.ActuatorToCheck.Count; i++)
             {
-
-                StatusData sd = (StatusData)drs[i+1][columnTitle]; //get the elements of a column 
-
-                if (sd.Group == sequenceGroupIndex[j])
+                StatusData sd = new StatusData();
+                if (sequenceMatrix.ActuatorToCheck[i].Name == columnTitle)//find the element to check now
                 {
-                    myList.Add(GameObject.Find(NPOIGetDatatable.OperableComponentNames[i]));
-                    constraintSymbole = sd.Symbol;
-                    constraintStatus = sd.Status;
+                    for (int k = 0; k < sequenceMatrix.ActuatorToCheck[i].Prerequisites.Count; k++)
+                    {
+                        sd = (StatusData)sequenceMatrix.ActuatorToCheck[i].Prerequisites[k]; //get the elements of a column 
+
+                        if (sd.Group == sequenceGroupIndex[j]) //in the column, if an element's group is the same as a char stored in list
+                        {
+                            myList.Add(GameObject.Find(sd.Name/*SteamGenerator.SequenceElements.ElementAt(i)*//*NPOIGetSequenceTable.OperableComponentNames[i]*/));
+                            constraintSymbole = sd.Symbol;
+                            constraintStatus = sd.Status;
+                            //Debug.Log("the group elements: " + sd.Name);
+                        }
+                    }
                 }
+                
+
+
             }
 
-            sequenceComponentsGroup.Add((char)sequenceGroupIndex[j], myList);
+
+            sequenceComponentsGroup.Add((char)sequenceGroupIndex[j], myList); //each group indentifier is able to retrieve the elements
             //loop inside a group, because for  the components of a group may have different values in excel's cells
             var groupSum = 0;
             for (int k = 0; k < sequenceComponentsGroup[(char)sequenceGroupIndex[j]].Count; k++)
@@ -581,10 +765,15 @@ public class Evaluation : MonoBehaviour
                 groupSum += componentStatus;
             }
 
-            if (constraintSymbole == '+' && groupSum < constraintStatus)
+            var abc = groupSum < constraintStatus;
+            //Debug.Log("groupSum : " + groupSum);
+            //Debug.Log("constraintStatus: " + constraintStatus);
+            //Debug.Log("groupSum < constraintStatus: " + abc);
+
+            if(constraintSymbole == '+' && groupSum < constraintStatus)
             {
                 StudentOperations.ActingAction.IsModificationCorrect = false;
-                Debug.Log(string.Format("the component of group: {0} should be at least: {1}", sequenceGroupIndex[j], constraintStatus));
+                //Debug.Log(string.Format("the component of group: {0} should be at least: {1}", sequenceGroupIndex[j], constraintStatus));
 
                 for (int i = 0; i < sequenceComponentsGroup[(char)sequenceGroupIndex[j]].Count; i++)
                 {
@@ -671,6 +860,7 @@ public class Evaluation : MonoBehaviour
         }
         if(!isSequenceCorrect || (!isFinalSettingCorrect && SpeechRecognizer.HasCommandFinish)) //sequence is not correct or final setting is not correct
         {
+            Debug.Log("isSequenceCorrect in set alarm"+ isSequenceCorrect);
             GameObject.Find("alarm").GetComponentInChildren<MeshRenderer>().material = alarmRed;
             alarmAudio.Play();
         }
@@ -805,7 +995,9 @@ public class Evaluation : MonoBehaviour
     public void BlinkTrainingActuatorSequence()
     {
         //blink the other prerequisite actuators according to the acting actuator
-        foreach(var actuator in StudentOperations.ActingAction.WrongSequenceActions) {
+        foreach(var actuator in StudentOperations.ActingAction.WrongSequenceActions)
+        {
+            Debug.Log("actuator.WrongActuator.gameObject: " + actuator.WrongActuator.gameObject);
             actuator.WrongActuator.gameObject.GetComponent<BlinkMaterial>().enabled = true;
             actuator.WrongActuator.gameObject.GetComponent<BlinkMaterial>().BlinkMat = actuator.WrongActuator.gameObject.GetComponent<BlinkMaterial>().ErrorAlarmBlinkMat;
             actuator.WrongActuator.gameObject.GetComponent<BlinkMaterial>().IsBlink = true;
@@ -869,31 +1061,33 @@ public class Evaluation : MonoBehaviour
     /// </summary>
     private void CreateSequence()
     {
+        float offset = 0;
         //get the sequence numbers and create texts.
-        for (int i = 0; i < NPOIGetDatatable.SequenceDatatables.Count; i++)
+        for (int i = 0; i < SteamGenerator.SequenceMatrices.Count/*NPOIGetSequenceTable.SequenceDatatables.Count*/; i++)
         {
-
-            if (NPOIGetDatatable.SequenceDatatables[i].TableName.Contains(PanelManager.listToggleText[2]))
+            if (SteamGenerator.SequenceMatrices[i].SubTask/*NPOIGetSequenceTable.SequenceDatatables[i].TableName*/.Contains(PanelManager.listToggleText[2]))
             {
                 _sequenceContainer.transform.position = Vector3.zero;
-                var sequenceTable = NPOIGetDatatable.SequenceDatatables[i]; //get the correct sequence table
-                var datarows = sequenceTable.Select();
-                for (int j = 0; j < sequenceTable.Columns.Count; j++)
+                //var sequenceTable = NPOIGetSequenceTable.SequenceDatatables[i]; //get the correct sequence table
+                for (int k = 0; k < SteamGenerator.SequenceMatrices[i].ActuatorToCheck.Count; k++)
                 {
-                    StatusData value = (StatusData) datarows[0][j]; //the first row in the datatable is the sequence row
-                    GameObject sequenceNumber = new GameObject("Sequence "+sequenceTable.Columns[j].ColumnName); //create the text objects
-                    sequenceNumber.transform.position = GameObject.Find(sequenceTable.Columns[j].ColumnName).transform.position;//set the text to the same position of the actuator
+                    GameObject sequenceNumber = new GameObject("Sequence " + SteamGenerator.SequenceMatrices[i].ActuatorToCheck[k].Name); //create the text objects
+
+                    Vector3 position = GameObject.Find(SteamGenerator.SequenceMatrices[i].ActuatorToCheck[k].Name).transform.position + new Vector3(0, -offset, 0);
+                    sequenceNumber.transform.position = position;//set the text to the same position of the actuator
                     sequenceNumber.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
                     sequenceNumber.transform.eulerAngles = new Vector3(0, 180, 0);
                     sequenceNumber.transform.SetParent(_sequenceContainer.transform);
                     sequenceNumber.AddComponent<MeshRenderer>();
                     var textMesh = sequenceNumber.AddComponent<TextMesh>();
-                    textMesh.text = value.Status.ToString(); //the sequence row is not status data but we read them from the excel as they are status data
+                    textMesh.text = SteamGenerator.SequenceMatrices[i].ActuatorToCheck[k].SequenceOrder.ToString(); //the sequence row is not status data but we read them from the excel as they are status data
                     textMesh.anchor = TextAnchor.UpperCenter;
                     textMesh.fontSize = 300;
                     textMesh.color = Color.red;
                 }
+
                 _sequenceContainer.SetActive(false);
+                offset += OffsetSequenceNumber;
             }
         }
     }
@@ -904,6 +1098,8 @@ public class Evaluation : MonoBehaviour
         {
             _sequenceContainer.SetActive(true);
         }
+        HelpMenuButtons.IsSequenceButtonClicked = true; 
+        //this is done because we have to tell the buttons on the help menu that this voice command has been trigged which is equivalent to button has been clicked. 
     }
 
     public static void HideSequence()
@@ -912,13 +1108,15 @@ public class Evaluation : MonoBehaviour
         {
             _sequenceContainer.SetActive(false);
         }
+        HelpMenuButtons.IsSequenceButtonClicked = false;
+        //this is done because we have to tell the buttons on the help menu that this voice command has been trigged which is equivalent to button has been clicked. 
     }
 
     /// <summary>
     /// check the final settings parameters here with the use of "math parser", the plugin is "info.lundin.Math" 
     /// </summary>
     /// <param name="columnTitle"></param>
-    public static void CheckFinalParameters(string columnTitle)
+    public static void CheckFinalParameters(ElementSettings es/*string columnTitle*/)
     {
         // Instantiate the parser
         ExpressionParser parser = new ExpressionParser();
@@ -926,34 +1124,21 @@ public class Evaluation : MonoBehaviour
         // Create a hashtable to hold values
         Hashtable h = new Hashtable();
 
-        // Add variables and values to hashtable
-        Debug.Log("GameObject.Find(columnTitle).GetComponent<IGeneratorComponent>().Status: " + GameObject.Find(columnTitle).GetComponent<IGeneratorComponent>().Status);
-        Debug.Log("PanelManager.listToggleText[2]: " + PanelManager.listToggleText[2]);
-        h.Add("x", GameObject.Find(columnTitle).GetComponent<IGeneratorComponent>().Status.ToString());
-
-        // Parse and write the result
-        for (int i = 0; i < NPOIGetParameters.parameterTable.Rows.Count; i++)
+        foreach (var key in es.ParameterSetting.Keys)
         {
-            if (NPOIGetParameters.parameterTable.Rows[i]["Sub task"].ToString().Contains(PanelManager.listToggleText[2])) //find the correct row by using the task
+            // Add variables and values to hashtable
+            h.Add("x", GameObject.Find(key.ToString()).GetComponent<IGeneratorComponent>().Status.ToString());
+            double newResult = parser.Parse(es.ParameterSetting[key], h);
+            if (newResult == 0)
             {
-                Debug.Log("NPOIGetParameters.parameterTable.Rows[i][columnTitle]: " + NPOIGetParameters.parameterTable.Rows[i][columnTitle]);
-                double result = parser.Parse(NPOIGetParameters.parameterTable.Rows[i][columnTitle].ToString(), h);
-                if (result == 0)
-                {
-                    WrongAction wrongAction = new WrongAction();
-                    wrongAction.Initialize();
-                    wrongAction.WrongActuator = GameObject.Find(columnTitle);
-                    wrongAction.Status = SetScenes.ScriptComponents[columnTitle].Status;
-                    StudentOperations.WrongFinalActuators.Add(wrongAction);
-                    isFinalSettingCorrect = false;
-                }
-                Debug.Log("Result: PanelManager.listToggleText[2]: " + PanelManager.listToggleText[2]);
-                Debug.Log("Result: NPOIGetParameters.parameterTable.Rows[i][Sub task]: " + NPOIGetParameters.parameterTable.Rows[i]["Sub task"]);
-
-                Debug.Log("Result: " + result);
+                WrongAction wrongAction = new WrongAction();
+                wrongAction.Initialize();
+                wrongAction.WrongActuator = GameObject.Find(key);
+                wrongAction.Status = SetScenes.ScriptComponents[key].Status;
+                StudentOperations.WrongFinalActuators.Add(wrongAction);
+                isFinalSettingCorrect = false;
             }
         }
-
     }
 
     //display and hide the feedback panel
@@ -974,14 +1159,33 @@ public class Evaluation : MonoBehaviour
         {
             if (!StudentOperations.AllActions[i].IsModificationCorrect)
             {
+                Debug.Log("!StudentOperations.AllActions[i].IsModificationCorrect: " + !StudentOperations.AllActions[i].IsModificationCorrect);
                 ErrorStartFlag = true;
+                for(int j = i + 1; j < StudentOperations.AllActions.Count; j++)
+                {
+                    if ((StudentOperations.AllActions[i].Actuator == StudentOperations.AllActions[j].Actuator))
+                    {
+                        if( StudentOperations.AllActions[j].IsModificationCorrect)
+                        {
+                            //if (isSequenceForTestingCorrect)
+                            //{
+                                ErrorStartFlag = false;
+                                Debug.Log("ErrorStartFlag 0: " + ErrorStartFlag);
+                            //}
+                        }
+
+                    }
+                }
                 
+                Debug.Log("ErrorStartFlag 1: " + ErrorStartFlag);
             }
 
             if (ErrorStartFlag)
             {
+                Debug.Log("ErrorStartFlag 2: " + ErrorStartFlag);
                 StudentOperations.AllActions[i].Actuator.GetComponentInChildren<IGeneratorComponent>().Status =
                     StudentOperations.AllActions[i].StatusBefore;//cancel all the actions after the wrong action.
+                Debug.Log("the actions cancelled: " + StudentOperations.AllActions[i].Actuator);
             }
         }
         alarm.GetComponentInChildren<MeshRenderer>().material = alarmGreen;
@@ -992,31 +1196,31 @@ public class Evaluation : MonoBehaviour
         isSequenceForTestingCorrect = true;
     }
 
-    /// <summary>
-    /// disable the interactions when the student does some wrong actions and confirm to finish the task
-    /// </summary>
-    static void DisableInteractions()
-    {
-        for (int i = 0; i < NPOIGetDatatable.OperableComponentNames.Count; i++)
-        {
+    ///// <summary>
+    ///// disable the interactions when the student does some wrong actions and confirm to finish the task
+    ///// </summary>
+    //static void DisableInteractions()
+    //{
+    //    for (int i = 0; i < NPOIGetSequenceTable.OperableComponentNames.Count; i++)
+    //    {
 
-            GameObject.Find(NPOIGetDatatable.OperableComponentNames[i]).GetComponentInChildren<Collider>().enabled= false;
+    //        GameObject.Find(NPOIGetSequenceTable.OperableComponentNames[i]).GetComponentInChildren<Collider>().enabled= false;
 
-        }
-    }
+    //    }
+    //}
 
-    /// <summary>
-    /// enable the interactions when the student choose the restart the task, correct the actions or quit. So this method should be subscribed to these buttons 
-    /// </summary>
-    public void ResumeInteractions()
-    {
-        for (int i = 0; i < NPOIGetDatatable.OperableComponentNames.Count; i++)
-        {
+    ///// <summary>
+    ///// enable the interactions when the student choose the restart the task, correct the actions or quit. So this method should be subscribed to these buttons 
+    ///// </summary>
+    //public void ResumeInteractions()
+    //{
+    //    for (int i = 0; i < NPOIGetSequenceTable.OperableComponentNames.Count; i++)
+    //    {
 
-            GameObject.Find(NPOIGetDatatable.OperableComponentNames[i]).GetComponentInChildren<Collider>().enabled = true;
+    //        GameObject.Find(NPOIGetSequenceTable.OperableComponentNames[i]).GetComponentInChildren<Collider>().enabled = true;
 
-        }
-    }
+    //    }
+    //}
 
     /// <summary>
     /// subscribe to the "quit" button so that the student can turn the actuators without triggering the alarm
