@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using Assets.Yuanju.Interfaces_and_classes.generator_components;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,14 +52,14 @@ public class TrialCountAndTaskCount : MonoBehaviour
             IsUpdateResult = false;
         }
 
-        foreach (var item in TrainingInfo)
-        {
-            Debug.Log("Item."+item.SubTask);
-            Debug.Log("item.CorrectCount" + item.CorrectCount);
-            Debug.Log("item.WrongCount" + item.WrongCount);
-            Debug.Log("item.OverallTrialCount" + item.OverallTrialCount);
-            Debug.Log("======================");
-        }
+        //foreach (var item in TrainingInfo)
+        //{
+        //    Debug.Log("Item."+item.SubTask);
+        //    Debug.Log("item.CorrectCount" + item.CorrectCount);
+        //    Debug.Log("item.WrongCount" + item.WrongCount);
+        //    Debug.Log("item.OverallTrialCount" + item.OverallTrialCount);
+        //    Debug.Log("======================");
+        //}
 
     }
 
@@ -116,11 +118,13 @@ public class TrialCountAndTaskCount : MonoBehaviour
     {
         //SpeechRecognizer.IsUpdateResult = true;
         resultsPrompt.transform.parent.gameObject.SetActive(true);
+        HelpMenuButtons.IsResultsButtonClicked = true;
     }
 
     public static void HideResult()
     {
         resultsPrompt.transform.parent.gameObject.SetActive(false);
+        HelpMenuButtons.IsResultsButtonClicked = false;
     }
 
     public void AddTaskTrialInfo()  //this method should be executed when "confirm" button is pressed
@@ -145,16 +149,27 @@ public class TrialCountAndTaskCount : MonoBehaviour
         {
             CurrentTaskTrialInfo = new TaskTrialInfo();
             CurrentTaskTrialInfo.Initialize();
-            for (int i = 0; i < NPOIGetDatatable.SequenceDatatables.Count; i++)
+
+            for (int i = 0; i < SteamGenerator.SubTasks.Count(); i++)
             {
-                if (NPOIGetDatatable.SequenceDatatables[i].TableName.Contains(PanelManager.listToggleText[2]))
+                if (SteamGenerator.SubTasks.ElementAt(i).Contains(PanelManager.listToggleText[2]))
                 {
-                    CurrentTaskTrialInfo.SubTask = NPOIGetDatatable.SequenceDatatables[i].TableName;
-                    Debug.Log("I add a new task: " + CurrentTaskTrialInfo.SubTask);
+                    CurrentTaskTrialInfo.SubTask = SteamGenerator.SubTasks.ElementAt(i);
+                    //Debug.Log("I add a new task: " + CurrentTaskTrialInfo.SubTask);
                     break;
                 }
-
             }
+
+            //for (int i = 0; i < NPOIGetSequenceTable.SequenceDatatables.Count; i++)
+            //{
+            //    if (NPOIGetSequenceTable.SequenceDatatables[i].TableName.Contains(PanelManager.listToggleText[2]))
+            //    {
+            //        CurrentTaskTrialInfo.SubTask = NPOIGetSequenceTable.SequenceDatatables[i].TableName;
+            //        //Debug.Log("I add a new task: " + CurrentTaskTrialInfo.SubTask);
+            //        break;
+            //    }
+
+            //}
 
             isListContainTask = true;
         }
