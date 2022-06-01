@@ -116,19 +116,19 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     /// </summary>
     public Vector3 StartAngularPosition { protected set; get; }
 
-    //the materials
-    [SerializeField]
-    public Material DefaultCubeMaterialStatus0;
-    public Material DefaultCylinderMaterialStatus0;
-    [SerializeField]
-    public Material GraspedCubeMaterial;
-    public Material GraspedCylinderMaterial;
-    [SerializeField]
-    public Material DefaultCubeMaterialStatus1;
-    public Material DefaultCylinderMaterialStatus1;
-    [SerializeField]
-    public Material DefaultCubeMaterialStatus2;
-    public Material DefaultCylinderMaterialStatus2;
+    ////the materials
+    //[SerializeField]
+    //public Material DefaultCubeMaterialStatus0;
+    //public Material DefaultCylinderMaterialStatus0;
+    //[SerializeField]
+    //public Material GraspedCubeMaterial;
+    //public Material GraspedCylinderMaterial;
+    //[SerializeField]
+    //public Material DefaultCubeMaterialStatus1;
+    //public Material DefaultCylinderMaterialStatus1;
+    //[SerializeField]
+    //public Material DefaultCubeMaterialStatus2;
+    //public Material DefaultCylinderMaterialStatus2;
 
     public AudioSource SwitchAudioClip;
     //public List<Material> MaterialList=new List<Material>();
