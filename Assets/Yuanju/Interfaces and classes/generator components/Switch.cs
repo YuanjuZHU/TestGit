@@ -133,9 +133,9 @@ public class Switch :  MonoBehaviour, IRotatableComponent
     public AudioSource SwitchAudioClip;
     //public List<Material> MaterialList=new List<Material>();
     [SerializeField]
-    public SwitchStatusMaterialSets SwitchStatusMaterials = new SwitchStatusMaterialSets();
+    public MaterialSets.StatusMaterialSets SwitchStatusMaterials = new MaterialSets.StatusMaterialSets();
     [SerializeField]
-    public SwitchPartsMaterialSets SwitchGraspedMaterials = new SwitchPartsMaterialSets();
+    public MaterialSets.PartsMaterialSets SwitchGraspedMaterials = new MaterialSets.PartsMaterialSets();
 
     private HingeJoint hingeJointSwitch;
 
@@ -368,7 +368,7 @@ public class Switch :  MonoBehaviour, IRotatableComponent
             var child = transform.GetChild(i).gameObject;
             if (IsPowerConnected)
             {
-                child.GetComponentInChildren<MeshRenderer>().material = SwitchStatusMaterials.MaterialSet[Status].MaterialsOfDifferentParts[i];
+                child.GetComponentInChildren<MeshRenderer>().material = SwitchStatusMaterials.MaterialSet[Status].MaterialsOfDifferentParts[i]/*MaterialSet[Status].MaterialsOfDifferentParts[i]*/;
             }
             else
             {
@@ -521,31 +521,31 @@ public class Switch :  MonoBehaviour, IRotatableComponent
 
 }
 
-/// <summary>
-/// a switch have several status, for each status, there should be a set of materials 
-/// </summary>
-[System.Serializable]
-public class SwitchStatusMaterialSets
-{
-    //[SerializeField]
-    public List<SwitchPartsMaterialSets> MaterialSet=new List<SwitchPartsMaterialSets>(); /*{ get; set; }*/
+///// <summary>
+///// a switch have several status, for each status, there should be a set of materials 
+///// </summary>
+//[System.Serializable]
+//public class SwitchStatusMaterialSets
+//{
+//    //[SerializeField]
+//    public List<SwitchPartsMaterialSets> MaterialSet=new List<SwitchPartsMaterialSets>(); /*{ get; set; }*/
 
-}
+//}
 
-/// <summary>
-/// a switch may have several parts
-/// </summary>
-[System.Serializable]
-public class SwitchPartsMaterialSets
-{
-    //[SerializeField]
-    [HideInInspector]
-    public string FontName;
+///// <summary>
+///// a switch may have several parts
+///// </summary>
+//[System.Serializable]
+//public class SwitchPartsMaterialSets
+//{
+//    //[SerializeField]
+//    [HideInInspector]
+//    public string FontName;
 
-    public List<Material> MaterialsOfDifferentParts = new List<Material>(); /*{ get; set; }*/
-    //public void Initialize()
-    //{
-    //    FontName = "Status in Initialize"/* + Switch.mySwitchMateri.MaterialSet.Count.ToString()*/;
-    //}
-}
+//    public List<Material> MaterialsOfDifferentParts = new List<Material>(); /*{ get; set; }*/
+//    //public void Initialize()
+//    //{
+//    //    FontName = "Status in Initialize"/* + Switch.mySwitchMateri.MaterialSet.Count.ToString()*/;
+//    //}
+//}
 
