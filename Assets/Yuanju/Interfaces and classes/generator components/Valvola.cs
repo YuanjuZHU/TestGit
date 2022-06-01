@@ -342,9 +342,12 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         {
             return;
         }
+        if (_isAdsorbent)
+        {
+            Angle = GetAdsorbentAngle(Angle, _adsorbableAngles);
+            Rotate(Angle);
+        }
 
-        Angle = GetAdsorbentAngle(Angle, _adsorbableAngles);
-        Rotate(Angle);
         //Debug.Log("StartAnchor while release: " + StartAnchorPos);
         //Evaluation.StudentOperations.ActingAction.StatusAfter = Status;
     }
