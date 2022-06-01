@@ -396,7 +396,7 @@ public class ReadCSVSetUpActuatorsEditor : EditorWindow
                                 {
                                     for (int j = 0; j < a; j++)
                                     {
-                                        var material = new SwitchPartsMaterialSets();
+                                        var material = new MaterialSets.PartsMaterialSets();
                                         material.FontName = string.Format("Status {0} materials ", j);
                                         generatorSwitch.SwitchStatusMaterials.MaterialSet.Add(material);
                                     }
