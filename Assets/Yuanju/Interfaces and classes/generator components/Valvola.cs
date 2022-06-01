@@ -228,10 +228,10 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         }
 
         ComputeAngle();
-        ////float angle= hingeJointValve.axis.x * transform.localEulerAngles.x+ hingeJointValve.axis.y * transform.localEulerAngles.y+ hingeJointValve.axis.z * transform.localEulerAngles.z;
-        ////Angle = angle;
-        //////Angle = transform.localEulerAngles.x;
-        ////Angle = (Angle < 180) ? Angle : Angle - 360;
+        float angle = hingeJointValve.axis.x * transform.localEulerAngles.x + hingeJointValve.axis.y * transform.localEulerAngles.y + hingeJointValve.axis.z * transform.localEulerAngles.z;
+        Angle = angle;
+        //Angle = transform.localEulerAngles.x;
+        Angle = (Angle < 180) ? Angle : Angle - 360;
 
         //obsolete, because can not limit the range precisely, use the limits in hinge joint instead
         //if (_rotateLimit)
