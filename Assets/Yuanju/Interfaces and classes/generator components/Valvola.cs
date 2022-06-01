@@ -203,11 +203,11 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         if (previousStatus != Status)
         {
             //TODO remember to turn the component to the correct status
-            Rotate(ValveStatusAngle[Status] - StartAngle);
+            //Rotate(ValveStatusAngle[Status] - StartAngle);
             previousStatus = Status;
             ComputeAngle();
-            _openPercentage = (Angle - StartAngle) / (angleRange.Length == 0 ? 1 : angleRange.Length);
-            audioSourceFluid.volume = OpenPercentage*0.2f;
+            _openPercentage = Mathf.Abs((Angle - StartAngle) / (angleRange.Length == 0 ? 1 : angleRange.Length));
+            //audioSourceFluid.volume = OpenPercentage*0.2f;
             audioSourceFluid.loop=true;
             audioSourceFluid.Play();
         }
