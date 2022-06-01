@@ -129,11 +129,17 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
     /// </summary>
     public Vector3 StartAngularPosition { protected set; get; }
     //the materials
+    //[SerializeField]
+    //public Material DefaultMetalHandleMaterial;
+    //public Material DefaultPlasticCoverMaterial;
+    //public Material GraspedMetalHandleMaterial;
+    //public Material GraspedPlasticCoverMaterial;
+
     [SerializeField]
-    public Material DefaultMetalHandleMaterial;
-    public Material DefaultPlasticCoverMaterial;
-    public Material GraspedMetalHandleMaterial;
-    public Material GraspedPlasticCoverMaterial;
+    public MaterialSets.StatusMaterialSets ValveStatusMaterials = new MaterialSets.StatusMaterialSets();
+    [SerializeField]
+    public MaterialSets.PartsMaterialSets ValveGraspedMaterials = new MaterialSets.PartsMaterialSets();
+
 
     private HingeJoint hingeJointValve;
 
@@ -279,10 +285,11 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         for (int i = 0; i < transform.childCount; i++)
         {
             var child = transform.GetChild(i).gameObject;
-            if (child.name.Contains("metal handle"))
-                child.GetComponentInChildren<MeshRenderer>().material = GraspedMetalHandleMaterial;
-            if (child.name.Contains("plastic cover"))
-                child.GetComponentInChildren<MeshRenderer>().material = GraspedPlasticCoverMaterial;
+            //if (child.name.Contains("metal handle"))
+            //    child.GetComponentInChildren<MeshRenderer>().material = GraspedMetalHandleMaterial;
+            //if (child.name.Contains("plastic cover"))
+            //    child.GetComponentInChildren<MeshRenderer>().material = GraspedPlasticCoverMaterial;
+            child.GetComponentInChildren<MeshRenderer>().material = ValveGraspedMaterials.MaterialsOfDifferentParts[i];
         }
 
 
@@ -310,18 +317,19 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
             return;
         }
 
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            var child = transform.GetChild(i).gameObject;
-            if (child.name.Contains("metal handle"))
-            {
-                child.GetComponentInChildren<MeshRenderer>().material = DefaultMetalHandleMaterial;
-            }
-            if (child.name.Contains("plastic cover"))
-                child.GetComponentInChildren<MeshRenderer>().material = DefaultPlasticCoverMaterial;
-        }
+        UpdateMaterials();
+        //for (int i = 0; i < transform.childCount; i++)
+        //{
+        //    var child = transform.GetChild(i).gameObject;
+        //    if (child.name.Contains("metal handle"))
+        //    {
+        //        child.GetComponentInChildren<MeshRenderer>().material = DefaultMetalHandleMaterial;
+        //    }
+        //    if (child.name.Contains("plastic cover"))
+        //        child.GetComponentInChildren<MeshRenderer>().material = DefaultPlasticCoverMaterial;
+        //}
 
-        if(OpenPercentage > OpenValveThreshold) 
+        if (OpenPercentage > OpenValveThreshold) 
         {
             Status = 1;
         } 
@@ -471,18 +479,27 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
 
 
     public void UpdateMaterials() //this method can not be deleted
-   {
-       for(int i = 0; i < transform.childCount; i++) {
-           var child = transform.GetChild(i).gameObject;
-           if(child.name.Contains("metal handle")) {
-               child.GetComponentInChildren<MeshRenderer>().material = DefaultMetalHandleMaterial;
-           }
-           if(child.name.Contains("plastic cover"))
-               child.GetComponentInChildren<MeshRenderer>().material = DefaultPlasticCoverMaterial;
-       }
+    {
+        //for(int i = 0; i < transform.childCount; i++)
+        //{
+        //    var child = transform.GetChild(i).gameObject;
+        //    if (child.name.Contains("metal handle"))
+        //    {
+        //        child.GetComponentInChildren<MeshRenderer>().material = DefaultMetalHandleMaterial;
+        //    }
+        //    if (child.name.Contains("plastic cover"))
+        //        child.GetComponentInChildren<MeshRenderer>().material = DefaultPlasticCoverMaterial;
+        //}
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            var child = transform.GetChild(i).gameObject;
+            child.GetComponentInChildren<MeshRenderer>().material = ValveStatusMaterials.MaterialSet[0].MaterialsOfDifferentParts[i];
+            
+        }
 
-       //Debug.Log("valve materials updated: " + gameObject);
-   }
+
+        //Debug.Log("valve materials updated: " + gameObject);
+    }
 
 
     private void ComputeAngle()
