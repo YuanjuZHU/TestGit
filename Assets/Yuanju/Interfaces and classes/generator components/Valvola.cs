@@ -22,8 +22,8 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
     [SerializeField]
     protected bool isEnabled = true;
     //the steam(water) possibleFluxRate that will be sent to(from) the generator m3/s
-    [SerializeField]
-    private float nominalFluxRate;
+    //[SerializeField]
+    //private float nominalFluxRate;
 
 
     [SerializeField]
@@ -107,22 +107,22 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         get { return _rotateLimit; }
     }
 
-    [SerializeField]
-    protected float possibleFluxRate;
-    public float PossibleFluxRate
-    {
-        get { return possibleFluxRate; }
-        set { possibleFluxRate = value; }
-    }
+    //[SerializeField]
+    //protected float possibleFluxRate;
+    //public float PossibleFluxRate
+    //{
+    //    get { return possibleFluxRate; }
+    //    set { possibleFluxRate = value; }
+    //}
 
 
-    [SerializeField]
-    protected float possibleTotalFlux;
-    public float PossibleTotalFlux
-    {
-        get { return possibleTotalFlux; }
-        set { possibleTotalFlux = value; }
-    }
+    //[SerializeField]
+    //protected float possibleTotalFlux;
+    //public float PossibleTotalFlux
+    //{
+    //    get { return possibleTotalFlux; }
+    //    set { possibleTotalFlux = value; }
+    //}
 
     /// <summary>
     /// Start angles.
@@ -191,7 +191,7 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         previousStatus = Status;//initialization for the valve's previous status
         _openPercentage = OpenPercentage;//initialization for the valve's open percentage
 
-        PossibleFluxRate = nominalFluxRate * OpenPercentage; //assign the possibleFluxRate
+        //PossibleFluxRate = nominalFluxRate * OpenPercentage; //assign the possibleFluxRate
         //StartAnchorPos = transform.gameObject.GetComponent<HingeJoint>().connectedAnchor;
         IsNeedCheck = false;
 
@@ -250,7 +250,7 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
 
         if (_openPercentage != OpenPercentage)
         {
-            PossibleFluxRate = nominalFluxRate * OpenPercentage;
+            //PossibleFluxRate = nominalFluxRate * OpenPercentage;
             _openPercentage = OpenPercentage;
             //change the volume of the audio here, the open percentage is relative to the volume of the water ///waterpipe_15s.wav
             //audio for the valve
