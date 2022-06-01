@@ -26,7 +26,6 @@ Instrument&Misuratore ottico di livello&31C&NULL&NULL&NULL&NULL&gaze + speech&Li
 Instrument&Manometro generatore&28A&NULL&NULL&NULL&NULL&gaze + speech&Manometro  indica il valore corrente della pressione del generatore????
 Valvola&Valvole di esclusione del livello ottico 3-1&29B&0&1&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola sottostante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
 Valvola&Valvole di esclusione del livello ottico 3-2&29C&0&1&0&2&gaze + speech&Valvola carico livello ottico dell’acqua presente nel serbatoio da aprirsi assieme alla valvola soprastante – conviene attivare il livello ottico per tenere sotto controllo il livello dell’acqua del serbatoio
-Instrument&Misuratore ottico di livello&29A&NULL&NULL&NULL&NULL&gaze + speech&Livello ottico – visualizza la quantità d’acqua presente nel generatore, quando in funzione fare attenzione che non diminuisca, in tal caso controllare che le valvole di carico acqua siano aperte e quelle di scarico siano chiuse.
 Instrument&Misuratore di temperatura&37A&NULL&NULL&NULL&NULL&gaze + speech&visualizza la temperatura del vapore
 Valvola&Valvola bassissimo livello corpo cilindrico 1&35A&0.35&0&1&NULL&gaze + speech&Valvola di scarico bassissimo livello corpo cilindrico
 Valvola&Valvola uscita vapore 1&8A&0&1&0&NULL&gaze + speech&Valvola uscita vapore???
