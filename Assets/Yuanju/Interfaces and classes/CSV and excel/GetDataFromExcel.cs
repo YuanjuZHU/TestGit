@@ -133,7 +133,6 @@ public class GetDataFromExcel : MonoBehaviour
     /// <returns></returns>
     public static List<Sequence> ReadSequenceSheets(IWorkbook wk)
     {
-        //Debug.Log("the name of the sheet: "+ sheetName);
         List<Sequence> sequenceMatrixList = new List<Sequence>();
 
         for (int i = 0; i < wk.NumberOfSheets; i++)
@@ -146,10 +145,15 @@ public class GetDataFromExcel : MonoBehaviour
                 int ColumnNum = components.LastCellNum;
                 int paramterNumber = (int.Parse)(firstRow.GetCell(3).ToString());
                 //Debug.Log("wk.GetSheetName(i) parameter number: " + wk.GetSheetName(i) + " " + paramterNumber);
-                //Debug.Log("the column number of the table: " + ColumnNum);
+                Debug.Log("paramterNumber: " + paramterNumber);
                 //divide the data into several tables
                 int TableNum = (sheet.LastRowNum + 1) / ((ColumnNum + 1/*sequence order row*/+ 1/*number row*/+ 1/*task row*/) + paramterNumber/*ParaNum*/);
-                for (int k = 0; k < TableNum; k++) //loop for the different tables within a task sequence sheet
+                Debug.Log("the TableNum sheet.LastRowNum + 1: " + (sheet.LastRowNum + 1));
+                Debug.Log("ColumnNum + 1 + paramterNumber: " + (ColumnNum + 1 + paramterNumber));
+                Debug.Log("TableNum: " + TableNum);
+                Debug.Log("1/1: " + (int)1/1);
+                TableNum = 1;
+                for(int k = 0; k < TableNum; k++) //loop for the different tables within a task sequence sheet
                 {
                     Sequence sequence = new Sequence();
                     ActuatorConditions actuatorConditions;
@@ -158,16 +162,16 @@ public class GetDataFromExcel : MonoBehaviour
                     //we know that we get the task at the starting of a table
                     var subTask = sheet.GetRow(k * ((ColumnNum + 1/*order row*/+ 1/*nunmber row*/+ 1/*task row*/) + paramterNumber/*ParaNum*/)).GetCell(1);//get the ith table's task 
                     sequence.SubTask = subTask.ToString();
-
-                    for (int l = 1; l < ColumnNum; l++) //starts from "Modeaccensione pompa" and ends at "Pressostato setting" it seems that .lastCellNum sometimes take some empty cells
+                    Debug.Log("the the table: ");
+                    for(int l = 1; l < ColumnNum; l++) //starts from "Modeaccensione pompa" and ends at "Pressostato setting" it seems that .lastCellNum sometimes take some empty cells
                     {
                         if (sheet.GetRow(k * (ColumnNum + 3 + paramterNumber) + 3).GetCell(l).ToString() != "NULL") //when the sequence order's value is "NULL", the column is not stored
                         {
                             actuatorConditions = new ActuatorConditions(); //a column in the table
                             actuatorConditions.Name = headerRow.GetCell(l).ToString(); //the column represent an element to be checked 
                             actuatorConditions.SequenceOrder = int.Parse(sheet.GetRow(k * (ColumnNum + 3 + paramterNumber) + 3).GetCell(l).ToString());
-                            //Debug.Log("columns in the matrices: " + actuatorConditions.Name);
-                            //Debug.Log("actuatorConditions.SequenceOrder: " + actuatorConditions.SequenceOrder);
+                            Debug.Log("columns in the matrices: " + actuatorConditions.Name);
+                            Debug.Log("actuatorConditions.SequenceOrder: " + actuatorConditions.SequenceOrder);
                             for (int j = k * (ColumnNum + 3 + paramterNumber) + 3 + 1; j < (k + 1) * (ColumnNum + 3 + paramterNumber/*ParaNum*/); j++) //jth row, skip the task number and components
                             {
                                 StatusData sd = new StatusData();
