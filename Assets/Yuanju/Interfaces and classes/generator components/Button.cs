@@ -123,7 +123,7 @@ public class Button :MonoBehaviour, IPressableComponent
         Initialize();
         //todo find the pressure display game object in Awake
         iterateGameObject = gameObject;
-        while (!SetScenes.GeneratorElements.Contains(iterateGameObject.name))
+        while (!SteamGenerator.InitialSettingElements/*SetScenes.GeneratorElements*/.Contains(iterateGameObject.name))
         {
             iterateGameObject = iterateGameObject.transform.parent.gameObject;
         }
@@ -311,9 +311,15 @@ public class Button :MonoBehaviour, IPressableComponent
             IsNeedCheck = true;
         }
 
-        GameObject generator = GameObject.Find("Generator V3");
-        SteamGenerator steamGenerator = new SteamGenerator(generator);
-        steamGenerator.SerializeGeneratorStatus();
+        //GameObject generator = GameObject.Find("Generator V3");
+        //SteamGenerator steamGenerator = new SteamGenerator(generator);
+        //Debug.Log("Serializzo");
+        //var compList = steamGenerator.SerializeGeneratorStatus();
+        //Debug.Log("Produco json");
+        //var json = steamGenerator.GetJson(compList);
+        //Debug.Log("Produco json " + json);
+
+        //UDP_Connection.senderUdpClient(json);
     }
 
     public void LowlightComponentsWhileContacting() //subscribe to interaction OnGrasp(Contact)Begin, lowlight here means stop blinking
@@ -321,20 +327,20 @@ public class Button :MonoBehaviour, IPressableComponent
         Evaluation.StudentOperations.ActingAction = new Evaluation.AnAction(); // the creation of the acting actuator should be put in the "on press" event
         Evaluation.StudentOperations.ActingAction.Initialize();
         Evaluation.StudentOperations.ActingAction.IsModificationCorrect = true;
-        Debug.Log("the status of the actuator while contacting: " + iterateGameObject.GetComponentInChildren<IGeneratorComponent>().Status);
+        //Debug.Log("the status of the actuator while contacting: " + iterateGameObject.GetComponentInChildren<IGeneratorComponent>().Status);
         Evaluation.StudentOperations.LastAction.Actuator = Evaluation.StudentOperations.ActingAction.Actuator;
         //Evaluation.StudentOperations.ActingAction.Actuator = null; //get the actuator
         //todo here should be a logic to be able to find control elements(the pressure display)
 
         //iterateGameObject.GetComponent<IGeneratorComponent>().IsNeedCheck = true;//need to sequence check the pressure display
-        Debug.Log("the iterate gameobject class: "+ iterateGameObject.GetComponent<IGeneratorComponent>());
-        Debug.Log("the iterate gameobject class.status "+ iterateGameObject.GetComponent<IGeneratorComponent>().Status);
-        Debug.Log("the iterate gameobject class.isneedcheck: "+ iterateGameObject.GetComponent<IGeneratorComponent>().IsNeedCheck);
+        //Debug.Log("the iterate gameobject class: "+ iterateGameObject.GetComponent<IGeneratorComponent>());
+        //Debug.Log("the iterate gameobject class.status "+ iterateGameObject.GetComponent<IGeneratorComponent>().Status);
+        //Debug.Log("the iterate gameobject class.isneedcheck: "+ iterateGameObject.GetComponent<IGeneratorComponent>().IsNeedCheck);
         Evaluation.StudentOperations.ActingAction.Actuator = iterateGameObject; //get the actuator
 
-        Debug.Log("here I get the acting actuator gameobject: " + Evaluation.StudentOperations.ActingAction.Actuator.name);
+        //Debug.Log("here I get the acting actuator gameobject: " + Evaluation.StudentOperations.ActingAction.Actuator.name);
         //Evaluation.StudentOperations.ActingAction.StatusBefore = gameObject.GetComponentInChildren<IGeneratorComponent>().Status; //get the status before
-        foreach (var name in NPOIGetDatatable.OperableComponentNames)
+        foreach (var name in SteamGenerator.InitialSettingElements)
         {
             if(GameObject.Find(name).GetComponent<BlinkMaterial>() != null) 
             {
