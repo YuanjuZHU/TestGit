@@ -15,7 +15,7 @@ public class ReadCSV : MonoBehaviour
     //get the info in Awake
     void Awake()
     {
-        dt= ReadDataFromCsv("Assets/Yuanju/Components in Italian UTF 8 updated.csv");  //read the CSV file and put the data into a data table
+        dt= ReadDataFromCsv("Assets/Yuanju/Components in Italian UTF 8 updated-TIRRENOPOWER.csv");  //read the CSV file and put the data into a data table
         //select the data rows who have the same name as the touched gameobject(eg. Select("name="+touched gameobject.parsedName) )
         componentTags = GetComponentInfo(dt,"TYPE");
         componentNames = GetComponentInfo(dt,"NAME");
