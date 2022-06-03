@@ -157,7 +157,7 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
     public bool IsNeedCheck { get; set; }
     public AudioSource audioSourceFluid = new AudioSource();
     private AudioSource audioSourceValve;
-    public float OpenValveThreshold = 0.99f;
+    public float OpenCloseThreshold = 0.02f;
 
 
     #endregion
@@ -202,8 +202,9 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         //update the position of the valve while we set the status in the inspector, also update the audio
         if (previousStatus != Status)
         {
+            Debug.Log("previousStatus != Status");
             //TODO remember to turn the component to the correct status
-            //Rotate(ValveStatusAngle[Status] - StartAngle);
+            Rotate(ValveStatusAngle[Status] - StartAngle);
             previousStatus = Status;
             ComputeAngle();
             _openPercentage = Mathf.Abs((Angle - StartAngle) / (angleRange.Length == 0 ? 1 : angleRange.Length));
@@ -329,11 +330,12 @@ public class Valvola :  MonoBehaviour, IRotatableComponent
         //        child.GetComponentInChildren<MeshRenderer>().material = DefaultPlasticCoverMaterial;
         //}
 
-        if (OpenPercentage > OpenValveThreshold) 
+        if (OpenPercentage > 1 - OpenCloseThreshold) 
         {
             Status = 1;
         } 
-        else 
+
+        if(OpenPercentage < OpenCloseThreshold) 
         {
             Status = 0;
         }
