@@ -26,7 +26,7 @@ namespace Assets.Yuanju.Interfaces_and_classes.generator_components
         public static List<ElementSettings> InitialSettings = new List<ElementSettings>(); //each element in the list is a row in the excel
         public static List<ElementSettings> FinalSettings = new List<ElementSettings>();//each element in the list is a row in the excel
         public static List<ElementSettings> FinalParametersSetting = new List<ElementSettings>();
-        public string FilePath = "Assets/Yuanju/Values and situations plus Parameters.xlsx"; /*Assets/Yuanju/Values and situations plus Parameters.xlsx*/
+        public string FilePath = "Assets/Yuanju/Values and situations plus Parameters Tirreno Power.xlsx"; /*Assets/Yuanju/Values and situations plus Parameters.xlsx*/
         public static IEnumerable<string> Tasks; //the tasks in the initial and final setting sheets
         public static IEnumerable<string> SubTasks; // the sub tasks in the initial and final setting sheets
         public static IEnumerable<string> Problems; //the "Generator Status" in element setting and excel sheet
@@ -212,6 +212,8 @@ namespace Assets.Yuanju.Interfaces_and_classes.generator_components
             Tasks = InitialSettings.Select(x => x.Task);
             SubTasks = InitialSettings.Select(x => x.SubTask);
             Problems= InitialSettings.Select(x => x.GeneratorStatus);
+            Debug.Log("SequenceMatrices[0]: " + SequenceMatrices[0]);
+            Debug.Log("SequenceMatrices[0].ActuatorToCheck[0]: " + SequenceMatrices[0].ActuatorToCheck[0]);
             SequenceElements = SequenceMatrices[0].ActuatorToCheck.Select(x => x.Name);
 
             InitialSettingElements = new List<string>(InitialSettings[0].ElementStatus.Keys);
